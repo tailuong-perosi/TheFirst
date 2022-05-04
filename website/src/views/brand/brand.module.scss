@@ -1,0 +1,35 @@
+.body_brand {
+  background-color: white;
+  padding: 16px;
+  margin: 15px 15px;
+  border-radius: 5px;
+}
+.body_brand_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 15px;
+}
+.body_brand_header_title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.body_brand_header_list_text {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding-right: 10px;
+}
+.button_create_brand {
+  background-color: #007bff;
+  color: white;
+}
+.body_brand_filter {
+  padding: 15px 0;
+}
+.body_brand_delete_filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}

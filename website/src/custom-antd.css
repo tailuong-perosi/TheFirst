@@ -1,0 +1,231 @@
+/* custom modal */
+.ant-modal-content {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+.ant-tabs-dropdown-menu .ant-tabs-dropdown-menu-item .tab-sell{
+  color: black !important;
+}
+/* custom modal */
+
+/* custom select */
+.ant-select-selector {
+  border-radius: 5px !important;
+}
+
+.select-product-sell .ant-select-arrow {
+  left: 11px !important;
+}
+.select-product-sell .ant-select-selector {
+  padding-left: 31px !important;
+}
+
+.select-product-sell .ant-select-selector .ant-select-selection-search {
+  padding-left: 20px !important;
+}
+.dropdown-select-search-product {
+  min-width: 400px !important;
+}
+.dropdown-select-search-product .ant-select-item {
+  padding: 0px !important;
+}
+
+/* custom select */
+
+.br-15__date-picker {
+  border-radius: 5px !important;
+}
+
+/* custom button */
+.ant-btn {
+  border-radius: 5px !important;
+}
+.br-15__button {
+  border-radius: 5px !important;
+}
+/* custom button */
+
+/* custom input */
+.br-15__input {
+  border-radius: 5px !important;
+}
+.ant-input {
+  border-radius: 5px !important;
+}
+.ant-input-number {
+  border-radius: 5px !important;
+}
+.ant-input-affix-wrapper {
+  border-radius: 5px !important;
+}
+
+.ant-picker {
+  border-radius: 5px !important;
+}
+.show-handler-number .ant-input-number-handler-wrap {
+  opacity: 1 !important;
+}
+.input .ant-input-affix-wrapper {
+  border-radius: 50px !important;
+}
+.edit-form-item-register .ant-form-item {
+  margin-bottom: 0 !important;
+}
+.edit-form-item-register .ant-col {
+  max-height: 50px !important;
+}
+.edit-form-item-register .ant-form-item-explain-error {
+  margin-top: 5px !important;
+}
+/* custom input */
+
+.ant-popover {
+  z-index: 1500;
+}
+
+.ant-menu-item-only-child {
+  height: max-content !important;
+}
+.ant-menu-submenu-vertical > .ant-menu-submenu-title {
+  height: 60px !important;
+}
+/* custom menu */
+
+.upload-variant-image > .ant-upload {
+  width: 72px !important;
+  height: 72px !important;
+}
+
+.upload-category-image > .ant-upload {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.upload-shipping > .ant-upload {
+  width: 125px !important;
+  height: 125px !important;
+}
+
+/* custom upload antd */
+
+.ant-upload-list-item-actions {
+  display: flex !important;
+  align-items: center !important;
+}
+.image-product .ant-upload-list-item-actions {
+  opacity: 1 !important;
+}
+
+.ant-upload-list-item-info::before {
+  left: 0 !important;
+}
+
+.image-product .ant-upload-list-item-info::before {
+  opacity: 1 !important;
+}
+
+.ant-upload-list-picture-card-container {
+  width: 85px !important;
+  height: 85px !important;
+}
+
+.image-product .ant-upload-list-item-card-actions-btn {
+  opacity: 1 !important;
+}
+/* custom upload antd */
+
+/* custom tabs */
+.tabs-login .ant-tabs-nav::before {
+  border-bottom: none !important;
+}
+.tabs-login .ant-tabs-ink-bar {
+  background-color: white !important;
+}
+.tabs-login .ant-tabs-ink-bar.ant-tabs-ink-bar-animated {
+  width: 0px !important;
+  transition: none;
+}
+.ant-tabs-nav-wrap {
+  padding-top: 5px;
+}
+.tabs-invoices .ant-tabs-nav::before {
+  border-bottom: 0 !important;
+}
+.tabs-invoices .ant-tabs-nav {
+  margin-bottom: 0px !important;
+}
+.tabs-invoices .ant-tabs-nav-wrap {
+  padding-top: 0px !important;
+}
+.tabs-invoices .ant-tabs-tab div {
+  overflow: hidden !important;
+}
+
+.tabs-invoices .ant-tabs-tab {
+  background-color: #192da0 !important;
+  border-color: #192da0 !important;
+}
+
+.tabs-invoices .ant-tabs-tab.ant-tabs-tab-active {
+  background-color: white !important;
+  border-color: white !important;
+}
+.tabs-invoices {
+  max-width: 550px;
+  min-width: 550px;
+}
+
+.tabs-invoices .ant-tabs-tab {
+  max-width: 120px !important;
+  min-width: 120px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.tabs-invoices .ant-tabs-nav-add {
+  position: relative !important;
+  border: 0 !important;
+  background-color: transparent !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.tabs-login .ant-tabs-nav {
+  margin: 0px !important;
+}
+/* custom tabs */
+
+/* custom popover */
+.ant-popover-arrow {
+  display: none;
+}
+
+.table-product-in-order thead > tr > th {
+  background-color: white !important;
+}
+
+.table-product-in-order .ant-table {
+  margin-left: 0px !important;
+}
+/* custom popover */
+
+/* custom submenu arrow */
+.edit-submenu-arrow .ant-menu-submenu-arrow {
+  display: none;
+}
+
+.edit-submenu-arrow.ant-tooltip-arrow {
+  display: none !important;
+}
+
+.edit-submenu-arrow .ant-menu-item-only-child {
+  height: 40px !important;
+}
+
+/* Collapse Panel */
+.edit-collapse-panel .ant-collapse-header {
+  padding: 10px 0px !important;
+}
+/* Collapse Panel */

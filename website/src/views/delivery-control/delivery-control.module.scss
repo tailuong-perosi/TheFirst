@@ -1,0 +1,44 @@
+.promotion_manager {
+  // display: flex;
+  // justify-content: center;
+  background-color: white;
+  margin: 10px;
+  padding: 10px;
+  // align-items: center;
+  // flex-direction: column;
+}
+.promotion_manager_title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  color: black;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.promotion_manager_search {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1rem;
+  align-items: center;
+  width: 100%;
+}
+.promotion_manager_button {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+.hover_item {
+  cursor: pointer;
+}
+.hover_item:hover {
+  transform: scale(1.05);
+}
+.card {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border-radius: 10px;
+  border: 0 solid transparent;
+  overflow: hidden;
+}

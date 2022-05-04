@@ -1,0 +1,28 @@
+.body_blog{
+    background-color: white;
+    padding: 16px;
+    margin: 15px 15px;
+    border-radius: 5px;
+}
+.body_blog_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 15px;
+}
+.body_blog_header_title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.body_blog_header_list_text{
+    font-size: 20px;
+    padding-right: 10px;
+}
+.body_blog_create_content{
+    padding: 20px 0 ;
+}
+.body_blog_content_header{
+    padding-top: 20px;
+}
+

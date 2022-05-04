@@ -1,0 +1,104 @@
+.registration {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  &-content {
+    margin-top: 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    &-button-close {
+      position: absolute;
+      right: 30px;
+      border: none;
+      background-color: transparent;
+      width: 20px;
+      cursor: pointer;
+      span {
+        font-size: 20px;
+        color: #ccc;
+      }
+    }
+    &-container {
+      position: relative;
+      margin: 0 auto !important;
+      text-align: center;
+      width: 700px;
+
+      h2 {
+        margin: 0px;
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 41px;
+        text-align: center;
+        color: #ffffff;
+      }
+    }
+    &--logo {
+      img {
+        width: 10%;
+        height: 10%;
+        margin-bottom: 10px;
+      }
+    }
+    &--title {
+      h2 {
+        margin: 16px 0 0 0;
+        font-weight: 500;
+        font-size: 26px;
+      }
+      p {
+        margin: 11px 0 0 0;
+        font-size: 16px;
+        line-height: 19px;
+      }
+    }
+    &--form {
+      margin-top: 24px;
+
+      .btn-registration {
+        background: #fff !important;
+        font-size: 20px;
+        height: 100%;
+        width: 60%;
+        span {
+          color: #2148c1;
+        }
+      }
+      .btn-registration:hover {
+        span {
+          color: #2148c1;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .registration {
+    &-content {
+      &-container {
+        width: 100%;
+      }
+      &--title {
+        h2 {
+          margin: 16px 0 0 0;
+          font-weight: 500;
+          font-size: 20px;
+        }
+        p {
+          margin: 11px 0 0 0;
+          font-size: 14px;
+          line-height: 19px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+    "name": "be_admin1",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "pm2 start index.js",
+        "restart": "pm2 restart index.js",
+        "setup-production": "pm2 deploy production.config.js production setup",
+        "deploy-production": "pm2 deploy production.config.js production --env production --force",
+        "setup-sandbox": "pm2 deploy sandbox.config.js sandbox setup",
+        "deploy-sandbox": "pm2 deploy sandbox.config.js sandbox --env sandbox --force",
+        "begin": "pm2 start sandbox.config.js --env sandbox",
+        "end": "pm2 delete all",
+        "log": "pm2 log AO-Sandbox",
+        "check": "nodemon index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "aws-sdk": "^2.1029.0",
+        "axios": "^0.21.1",
+        "cors": "^2.8.5",
+        "crypto-js": "^4.1.1",
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "fs": "0.0.1-security",
+        "http-errors": "^1.7.2",
+        "jsonwebtoken": "^8.5.1",
+        "moment": "^2.29.1",
+        "moment-timezone": "^0.5.33",
+        "mongodb": "^3.6.9",
+        "multer": "^1.4.3",
+        "nodemailer": "^6.6.2",
+        "path": "^0.12.7",
+        "read-excel-file": "^5.2.24",
+        "request-ip": "^2.1.3",
+        "socket.io": "^3.0.0",
+        "util": "^0.12.4",
+        "xlsx": "^0.17.3"
+    },
+    "devDependencies": {
+        "bcrypt": "^5.0.1",
+        "crypto": "^1.0.1",
+        "nodemon": "^2.0.16"
+    }
+}

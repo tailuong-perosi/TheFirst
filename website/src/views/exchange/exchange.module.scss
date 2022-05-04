@@ -1,0 +1,75 @@
+.exchange_manager {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 1rem;
+    align-items: center;
+}
+.exchange_manager_title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: black;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.exchange_manager_select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.exchange_manager_select_col {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.exchange_manager_select_col_calendar {
+    // display: flex;
+    // justify-content: flex-start;
+    // align-items: center;
+    width: 100%;
+}
+.exchange_manager_select_col_calendar_child {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    align-items: center;
+}
+.exchange_manager_select_col_right {
+    // display: flex;
+    // justify-content: flex-end;
+    // align-items: center;
+    width: 100%;
+}
+.exchange_manager_table {
+    display: flex;
+    border: 1px solid rgb(204, 194, 194);
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+    max-width: 100%;
+    // margin-top: 1.5rem;
+    overflow: auto;
+}
+.exchange_manager_table_child {
+    width: 100%;
+    background-color: white;
+}
+.order_code {
+    cursor: pointer;
+    color: #007BFF;
+}
+.order_product {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.order_product > div {
+    margin-right: 1rem;
+}

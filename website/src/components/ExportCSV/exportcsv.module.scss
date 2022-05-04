@@ -1,0 +1,220 @@
+.orders_manager {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    margin: 1rem;
+    padding: 1rem;
+}
+.orders_manager_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    width: 100%;
+    border-bottom: 1px solid rgb(199, 185, 185);
+}
+.orders_manager_header_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.orders_manager_header_row_col {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.orders_manager_header_row_col_parent {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.orders_manager_header_row_col_parent > div {
+    color: rgb(185, 174, 174);
+    font-size: 1rem;
+    // font-weight: 600;
+}
+.orders_manager_header_row_col_parent_icon {
+    margin-right: 0.5rem;
+}
+.orders_manager_header_row_col_right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+.orders_manager_header_row_col_right_exports {
+    display: flex;
+    cursor: pointer;
+    margin-right: 1.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+.orders_manager_header_row_col_right_exports > div {
+    color: #1890ff;
+    font-size: 1rem;
+}
+.orders_manager_header_row_col_right_exports_icon {
+    margin-right: 0.5rem;
+}
+.import_orders {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1.5rem;
+    flex-direction: column;
+    width: 100%;
+}
+.import_orders_title {
+    display: flex;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(201, 184, 184);
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.import_orders_title_left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.import_orders_title_right {
+    display: flex;
+    cursor: pointer;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+.import_orders_title_left > div {
+    font-size: 1rem;
+    color: black;
+}
+.import_orders_title_right > div {
+    font-size: 1rem;
+    color: black;
+}
+.import_orders_title_left_icon {
+    margin-right: 0.5rem;
+}
+.import_orders_content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+}
+.import_orders_content_step1 {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.import_orders_content_select {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.import_orders_content_select_child {
+    width: 100%;
+}
+.import_orders_content > div {
+    color: black;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.import_orders_content_bottom {
+    display: flex;
+    justify-content: center;
+    border: 1px solid rgb(209, 196, 196);
+    cursor: pointer;
+    background-color: #fafafa;
+    border-style: dotted;
+    padding: 1.5rem 1rem;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+.import_orders_content_bottom_upload {
+    margin-bottom: 1rem;
+}
+.import_orders_content_button {
+    display: flex;
+    margin-top: 1.5rem;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+}
+.import_orders_content_button_left {
+    margin-right: 1.5rem;
+}
+.orders_manager_content {
+    display: flex;
+    margin-top: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.orders_manager_content_row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.orders_manager_content_row_col {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+.orders_manager_content_row_col_search {
+    width: 100%;
+}
+.orders_manager_content_row_col_date {
+    width: 100%;
+}
+.orders_manager_content_row_col_filter {
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    align-items: center;
+    border: 1px solid rgb(218, 203, 203);
+    cursor: pointer;
+    width: 100%;
+}
+.orders_manager_content_row_col_filter_icon {
+    margin-right: 0.5rem;
+}
+.orders_manager_content_row_col_filter:hover {
+    color: #1890ff;
+    border: 1px solid #1890ff;
+}
+.orders_manager_tabs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+.orders_manager_tabs_table {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+    max-width: 100%;
+    border: 1px solid rgb(214, 200, 200);
+    overflow: auto;
+}
+.orders_manager_tabs_table_child {
+    width: 100%;
+    background-color: white;
+}
+.orders_manager_tabs_child {
+    width: 100%;
+}

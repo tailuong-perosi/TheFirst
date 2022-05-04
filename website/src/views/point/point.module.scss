@@ -1,0 +1,75 @@
+.point-container {
+  padding: 15px;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  min-height: 85vh;
+  border-radius: 1.25rem;
+
+  .point-top {
+    margin-top: 1rem;
+
+    &-right {
+      &-top {
+        border-bottom: 1px solid rgba(177, 177, 177, 0.349);
+        padding-bottom: 1rem;
+      }
+
+      &-middle-1,
+      &-middle-2,
+      &-bottom {
+        margin-top: 1rem;
+        border-bottom: 1px solid rgba(177, 177, 177, 0.349);
+        padding-bottom: 1rem;
+        flex-direction: column;
+      }
+
+      &-middle-1 {
+        label {
+          margin-left: 0px;
+        }
+      }
+
+      &-middle-2 {
+        div {
+          margin-left: 0px;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+  .point-bottom {
+    margin-top: 2rem;
+
+    &-right {
+      &-payment,
+      &-content {
+        margin-top: 1rem;
+        border-bottom: 1px solid rgba(177, 177, 177, 0.349);
+        padding-bottom: 1rem;
+      }
+      &-payment {
+        margin-top: 0px;
+        flex-direction: column;
+
+        .format-display {
+          display: flex;
+          flex-direction: column;
+          label {
+            margin-left: 0px;
+          }
+        }
+      }
+
+      &-content {
+        flex-direction: column;
+        
+        .point-bottom-right-radio {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+@mixin button-background($color) {
+  min-width: 100px !important;
+  background-color: $color !important;
+  border-color: $color !important;
+  color: white !important;
+  &:hover {
+    background-color: lighten($color, 8%) !important;
+    border-color: lighten($color, 8%) !important;
+  }
+}
+.btn-add {
+  @include button-background(#377bff);
+}
+
+.payment_method {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem 1rem 0 1rem;
+  height: 100%;
+}
+.card {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border-radius: 1.25rem;
+  border: 0 solid transparent;
+  overflow: hidden;
+}

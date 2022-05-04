@@ -1,0 +1,36 @@
+.card {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border-radius: 1.25rem;
+  border: 0 solid transparent;
+  overflow: hidden;
+}
+
+.reports-container {
+  padding: 15px;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+  min-height: 85vh;
+}
+
+.report-item {
+  cursor: pointer;
+  border: 0.5px solid #ebdfdf73;
+  height: 70px;
+  padding: 7px;
+  transition: all 0.3s;
+
+  &:hover {
+    border: 1px solid #cac6c6;
+    .report-title {
+      opacity: 1;
+    }
+  }
+
+  .report-title {
+    margin-bottom: 0;
+    color: #5b6be8;
+    opacity: 0.8;
+    transition: all 0.3s;
+  }
+}

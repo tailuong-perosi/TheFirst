@@ -1,0 +1,21 @@
+.promotion_manager {
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+}
+.promotion_manager_title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  color: black;
+  font-weight: 600;
+}
+
+.card {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border-radius: 1.25rem;
+  border: 0 solid transparent;
+  overflow: hidden;
+}

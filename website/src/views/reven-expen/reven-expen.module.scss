@@ -1,0 +1,133 @@
+.reven_manager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  margin: 1rem;
+  padding: 1rem;
+}
+.reven_manager_title {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  color: black;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.reven_manager_search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.reven_manager_search_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.reven_manager_search_row_col {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+.reven_manager_search_row_col_search {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+.reven_manager_search_row_col_button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+.reven_manager_select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+.reven_manager_select_row {
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  width: 100%;
+}
+.reven_manager_search_row_col_select {
+  width: 100%;
+}
+.reven_manager_search_row_col_revenue {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  padding: 0.5rem;
+  line-height: 1.5rem;
+  flex-direction: column;
+  border: 1px solid rgb(212, 199, 199);
+  background-color: #2e8f2c;
+}
+.reven_manager_search_row_col_revenue > div {
+  color: white;
+  font-weight: 600;
+}
+.reven_manager_search_row_col_cost {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem;
+  cursor: pointer;
+  line-height: 1.5rem;
+  flex-direction: column;
+  border: 1px solid rgb(212, 199, 199);
+  background-color: #d9333d;
+}
+.reven_manager_search_row_col_cost > div {
+  color: white;
+  font-weight: 600;
+}
+.reven_manager_table {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  background-color: white;
+  max-width: 100%;
+  border: 1px solid rgb(211, 199, 199);
+  overflow: auto;
+}
+.reven_manager_table_child {
+  width: 100%;
+  background-color: white;
+}
+.detail {
+    cursor: pointer;
+    color: #0D00A7;
+}
+.reven_manager_button {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+}
+.reven {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+}
+.reven_item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-start;
+}

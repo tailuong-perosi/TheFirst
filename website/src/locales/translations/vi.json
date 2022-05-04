@@ -1,0 +1,29 @@
+{
+  "login": {
+    "login":"Đăng nhập",
+    "register":"Đăng ký",
+    "forgot_password":"Quên mật khẩu",
+    "input_phone":"Nhập số điện thoại",
+    "input_password":"Nhập mật khẩu",
+    "phone": "Số điện thoại",
+    "username": "Tài khoản",
+    "password":"Mật khẩu",
+    "password_again":"Nhập lại mật khẩu",
+    "business":"Tên doanh nghiệp",
+    "create_account":"Tạo tài khoản",
+    "help_phone":"Vui lòng nhập số điện thoại",
+    "help_username":"Vui lòng nhập tài khoản",
+    "help_password":"Vui lòng nhập mật khẩu",
+    "help_password_again":"Vui lòng nhập lại mật khẩu",
+    "help_business":"Vui lòng nhập tên doanh nghiệp",
+    "help_email":"Vui lòng nhập email",
+    "notification_success_register":"Đăng kí tài khoản thành công",
+    "notification_error_register":"Đăng kí tài khoản thất bại, vui lòng thử lại",
+    "notification_error_password_again":"Nhập lại mật khẩu không chính xác",
+    "notification_error_login":"Đăng nhập thất bại, vui lòng thử lại",
+
+    "vi":"Tiếng việt",
+    "en":"Tiếng anh",
+    "ja":"Tiếng nhật"
+  }
+}

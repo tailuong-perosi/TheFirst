@@ -1,0 +1,48 @@
+.configuration {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+}
+.configuration > div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+.configuration_content {
+  display: flex;
+  border-radius: 0.25rem;
+  background-color: white;
+  padding: 12px;
+  margin-top: 12px;
+  width: 100%;
+  flex-direction: column;
+}
+.configuration_content > div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.card {
+  box-shadow: 0 12px 23px 0 #5c37990a;
+  border-radius: 10px;
+  border: 0 solid transparent;
+  overflow: hidden;
+}
+
+.wrap-icon {
+  background-color: #fcdfef;
+  margin-right: 1rem;
+  border: 1px solid #f060ae;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 3rem;
+  max-height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
+  border-radius: 0.25rem;
+  font-size: 1.1rem;
+}

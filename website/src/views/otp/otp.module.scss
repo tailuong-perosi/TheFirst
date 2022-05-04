@@ -1,0 +1,31 @@
+.otp-container {
+  position: relative;
+  color: #fff;
+
+  .otp-content {
+    position: absolute;
+    padding: 0px 80px 0px 0px;
+    width: 50%;
+
+    &-resent {
+      margin-bottom: 0;
+      cursor: pointer;
+      font-weight: 700;
+      margin-left: 3px;
+      transition: all 0.5s;
+
+      &:hover {
+        color: rgb(146, 207, 243);
+      }
+    }
+
+    .otp-button {
+      margin-top: 15px;
+      background: #000 !important;
+      border-color: #000 !important;
+      font-size: 16px;
+      color: #fff !important;
+      width: 80%;
+    }
+  }
+}

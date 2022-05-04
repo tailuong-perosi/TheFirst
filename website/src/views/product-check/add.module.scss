@@ -1,0 +1,12 @@
+.product_check_add {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px 40px !important;
+}
+.product_check_add > div {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

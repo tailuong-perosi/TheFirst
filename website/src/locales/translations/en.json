@@ -1,0 +1,29 @@
+{
+  "login": {
+    "login":"Login",
+    "register":"Register",
+    "forgot_password":"Forgot password",
+    "input_phone":"Input phone",
+    "input_password":"Input password",
+    "phone": "Phone",
+    "username": "Username",
+    "password":"Password",
+    "password_again":"Input password again",
+    "business":"Business name",
+    "create_account":"Create account",
+    "help_phone":"Please input phone",
+    "help_username":"Please input username",
+    "help_password":"Please input password",
+    "help_password_again":"Please input password again",
+    "help_business":"Please input business name",
+    "help_email":"Please input email",
+    "notification_success_register":"Register account success",
+    "notification_error_register":"Register account failed, please try again",
+    "notification_error_password_again":"Re-enter incorrect password",
+    "notification_error_login":"Login failed, please try again",
+
+    "vi":"Vietnamese",
+    "en":"English",
+    "ja":"Japan"
+  }
+}
