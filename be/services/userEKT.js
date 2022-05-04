@@ -177,7 +177,7 @@ module.exports._get = async (req, res, next) => {
     }
 };
 
-module.exports._get = async (req, res, next) => {
+module.exports._getOne = async (req, res, next) => {
     try {
         let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)

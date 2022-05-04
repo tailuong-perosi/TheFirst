@@ -49,6 +49,20 @@ module.exports._register = async (req, res, next) => {
         if (user) {
             throw new Error('400: Số điện thoại hoặc email đã được sử dụng!');
         }
+        let [user_id] = await Promise.all([
+            client
+                .db(SDB)
+                .collection('AppSetting')
+                .findOne({ name: 'Users' })
+                .then((doc) => {
+                    if (doc) {
+                        if (doc.value) {
+                            return Number(doc.value);
+                        }
+                    }
+                    return 0;
+                })
+            ])
         user_id++;
         let _user = {
             user_id: user_id,
@@ -79,8 +93,12 @@ module.exports._register = async (req, res, next) => {
         await client
             .db(SDB)
             .collection('UsersEKT')
-            .insertOne(_user)
-        res.send({success: true,data: _user})
+            .insertOne(_user),
+        await client
+        .db(SDB)
+        .collection('AppSetting')
+        .updateOne({ name: 'Users' }, { $set: { name: 'Users', value: user_id } }, { upsert: true })
+        res.send({success: true,data: _user});
     }catch (err) {
         next(err);
     }
@@ -185,6 +203,13 @@ module.exports._delete = async (req, res, next) => {
 module.exports._getUser = async(req,res,next)=>{
     try {
         await UserEKTService._get(req, res, next);
+    } catch (err) {
+        next(err);
+    }
+}
+module.exports._getOne = async(req,res,next)=>{
+    try {
+        await UserEKTService._getOne(req, res, next);
     } catch (err) {
         next(err);
     }
