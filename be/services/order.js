@@ -349,17 +349,7 @@ module.exports._create = async (req, res, next) => {
                 slug_properties: 'donhang',
                 name: 'taodonhang',
             };
-            let _oderEKT = {
-                business_id: req.user._business.business_id,
-                branch_id: req.user.branch_id,
-                orderId: orderId,
-                user_phone: customer.customer_info.phone
-            };
-            console.log(req.user.database);
-            await Promise.all([
-                client.db(req.user.database).collection(`Actions`).insertOne(_action),
-                client.db(DB).collection(`ShoppingDarity`).insertOne(_oderEKT)
-        ]);
+            await Promise.all([client.db(req.user.database).collection(`Actions`).insertOne(_action)]);
         } catch (err) {
             console.log(err);
         }

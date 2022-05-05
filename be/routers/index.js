@@ -44,6 +44,6 @@ router.use(`/upload`, require(`./upload`));
 router.use(`/payment`, require(`./payment`));
 router.use('/report', require('./report'));
 
-router.use(`/userEKT`, require(`./uesrEKT`));
+router.use(`/userEKT`, require(`./userEKT`));
 
 module.exports = router;

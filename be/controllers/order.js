@@ -364,7 +364,7 @@ module.exports._create = async (req, res, next) => {
                 }
             }
             if (insertInventories.length > 0) {
-                console.log(inventoryId);
+                // console.log(inventoryId);
                 await client
                     .db(req.user.database)
                     .collection('AppSetting')
@@ -417,16 +417,26 @@ module.exports._create = async (req, res, next) => {
         }
         await orderService._create(req, res, next);
 
+        /**
+         * create by: tailuong
+         * create date:
+         * des:
+         * */
+
+        // console.log(req.user._business.business_id);
+        // console.log(_order.sale_location.branch_id);
+        // console.log(orderId);
+        // console.log(customer.phone);
         // Tạo thêm bảng mua của userEKT
-        // let _oderEKT = {
-        //     business_id: req.user._business.business_id,
-        //     branch_id: req.user.branch_id,
-        //     orderId: orderId,
-        //     user_phone: customer.customer_info.phone
-        // }
+        let _oderEKT = {
+            business_id: req.user._business.business_id,
+            branch_id: _order.sale_location.branch_id,
+            orderId: orderId,
+            user_phone: customer.phone
+        }
         // req[`body`] = _oderEKT;
         // await shippingService._create(req,res,next);
-        // await client.db(DB).collection('Shopping').insertMany(_oderEKT)
+        await client.db(DB).collection('Shopping').insertOne(_oderEKT)
     } catch (err) {
         next(err);
     }

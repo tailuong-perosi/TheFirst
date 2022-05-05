@@ -397,22 +397,21 @@ module.exports._get = async (req, res, next) => {
         { $limit: page_size }
       )
     }
+
+    /**
+     * creatBy: tailuong
+     * 
+     */
     // lấy data từ database
-    let [orders, counts] = await Promise.all([
+    let [orders] = await 
       client
         .db(DB)
-        .collection(`ShoppingDairy`)
+        .collection(`Shopping`)
         .aggregate(aggregateQuery)
-        .toArray(),
-      client
-        .db(DB)
-        .collection(`ShoppingDairy`)
-        .aggregate([...countQuery, { $count: 'counts' }])
-        .toArray(),
-    ])
+        .toArray();
+      
     res.send({
       success: true,
-      count: counts[0] ? counts[0].counts : 0,
       data: orders,
     })
   } catch (err) {
