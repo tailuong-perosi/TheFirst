@@ -4,7 +4,7 @@ import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 import { ROUTES } from 'consts'
 
 //base layout
-import BaseLayout from 'components/layout'
+import BaseLayout from 'components/Layout'
 import Authentication from 'components/authentication'
 
 //views

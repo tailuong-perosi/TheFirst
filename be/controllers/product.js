@@ -128,10 +128,10 @@ module.exports._create = async (req, res, next) => {
                         })(),
                     });
                 }
-            });
-        } else {
-            throw new Error('400: Sản phẩm chưa có thuộc tính!');
-        }
+            });}
+        // } else {
+        //     throw new Error('400: Sản phẩm chưa có thuộc tính!');
+        // }
         req['_variants'] = [];
         req['_locations'] = [];
         if (Array.isArray(req.body.variants) && req.body.variants.length > 0) {

@@ -87,7 +87,7 @@ module.exports._register = async (req, res, next) => {
             verify_link: verifyLink,
             verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
         };
-        await mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink));
+        // await mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink));
         await client.db(SDB).collection('VerifyLinks').insertOne(_verifyLink);
         let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
         sendSMS([req.body.username], verifyMessage, 2, 'VIESOFTWARE');
@@ -472,6 +472,7 @@ module.exports._register = async (req, res, next) => {
             verify_with: _business.verify_with,
             verify_link: verifyLink,
         });
+        // console.log("ten "+req.user);
     } catch (err) {
         next(err);
     }

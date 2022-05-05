@@ -272,6 +272,7 @@ module.exports._get = async (req, res, next) => {
             count: counts[0] ? counts[0].counts : 0,
             data: branchs,
         });
+        // console.log(req.user._business.business_id);
     } catch (err) {
         next(err);
     }

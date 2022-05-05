@@ -24,7 +24,7 @@ export default function CheckSubdomain() {
       const res = await checkBusiness(body.username)
       if (res.status === 200) {
         if (res.data.data)
-          window.location.href = `https://${res.data.data.prefix}.${process.env.REACT_APP_HOST}${ROUTES.LOGIN}?username=${body.username}`
+          window.location.href = `http://${res.data.data.prefix}.${process.env.REACT_APP_HOST}${ROUTES.LOGIN}?username=${body.username}`
         else
           notification.warning({
             message: 'Bạn chưa đăng ký doanh nghiệp!',

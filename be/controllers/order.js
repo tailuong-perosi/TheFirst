@@ -7,6 +7,7 @@ var CryptoJS = require('crypto-js');
 const { validateEmail } = require('../utils/regex');
 const { sendMailThanksOrder } = require('../libs/nodemailer');
 const { _changePoint } = require('./customer');
+const shippingService = require(`../services/shopping_dairy`)
 
 module.exports.enumStatusOrder = async (req, res, next) => {
     try {
@@ -415,6 +416,17 @@ module.exports._create = async (req, res, next) => {
             await sendMailThanksOrder(req.body.customer_info.email, 'Cám ơn bạn đã mua hàng', req.body);
         }
         await orderService._create(req, res, next);
+
+        // Tạo thêm bảng mua của userEKT
+        // let _oderEKT = {
+        //     business_id: req.user._business.business_id,
+        //     branch_id: req.user.branch_id,
+        //     orderId: orderId,
+        //     user_phone: customer.customer_info.phone
+        // }
+        // req[`body`] = _oderEKT;
+        // await shippingService._create(req,res,next);
+        // await client.db(DB).collection('Shopping').insertMany(_oderEKT)
     } catch (err) {
         next(err);
     }

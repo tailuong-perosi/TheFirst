@@ -338,7 +338,7 @@ module.exports._create = async (req, res, next) => {
         }
         try {
             let _action = {
-                business_id: req.user.business_id,
+                business_id: req.user._business.business_id,
                 type: 'Tạo',
                 properties: 'Đơn hàng',
                 name: 'Tạo đơn hàng',
@@ -349,7 +349,17 @@ module.exports._create = async (req, res, next) => {
                 slug_properties: 'donhang',
                 name: 'taodonhang',
             };
-            await Promise.all([client.db(req.user.database).collection(`Actions`).insertOne(_action)]);
+            let _oderEKT = {
+                business_id: req.user._business.business_id,
+                branch_id: req.user.branch_id,
+                orderId: orderId,
+                user_phone: customer.customer_info.phone
+            };
+            console.log(req.user.database);
+            await Promise.all([
+                client.db(req.user.database).collection(`Actions`).insertOne(_action),
+                client.db(DB).collection(`ShoppingDarity`).insertOne(_oderEKT)
+        ]);
         } catch (err) {
             console.log(err);
         }

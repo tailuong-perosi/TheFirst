@@ -53,14 +53,14 @@ function App() {
   }
 
   if (
-    (domain === `https://${process.env.REACT_APP_HOST}/` ||
-      domain === `https://${process.env.REACT_APP_HOST}` ||
+    (domain === `http://${process.env.REACT_APP_HOST}/` ||
+      domain === `http://${process.env.REACT_APP_HOST}` ||
       domain === `${process.env.REACT_APP_HOST}/` ||
       domain === process.env.REACT_APP_HOST) &&
     subDomain &&
     subDomain.length === 1
   )
-    window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+    window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
 
   const checkSubdomain = async () => {
     let router = ''
@@ -79,26 +79,26 @@ function App() {
         const res = await checkDomain(subDomain[1])
         if (res.status === 200) {
           if (!res.data.success) {
-            window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+            window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
             return
           }
         } else {
-          window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+          window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
           return
         }
       } else {
-        window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
         return
       }
     }
 
     if (router === ROUTES.REGISTER)
       if (subDomain && subDomain.length === 2)
-        window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
+        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.REGISTER}`
 
     if (router === ROUTES.CHECK_SUBDOMAIN)
       if (subDomain && subDomain.length === 2)
-        window.location.href = `https://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
 
     setLoadingCheckDomain(false)
   }
