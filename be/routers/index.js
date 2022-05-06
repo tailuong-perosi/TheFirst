@@ -45,5 +45,6 @@ router.use(`/payment`, require(`./payment`));
 router.use('/report', require('./report'));
 
 router.use(`/userEKT`, require(`./userEKT`));
+router.use(`/shoppingdairy`,require(`./shoppingDairy`));
 
 module.exports = router;

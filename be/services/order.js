@@ -260,50 +260,8 @@ module.exports._get = async (req, res, next) => {
                 },
             });
         }
-        if (req.query.product_sku) {
-            aggregateQuery.push({
-                $match: {
-                    'order_details.sku': {
-                        $in: [new RegExp(stringHandle(req.query.product_sku, { createRegexQuery: true }), 'ig')],
-                    },
-                },
-            });
-        }
-        if (req.query.customer_name) {
-            aggregateQuery.push({
-                $match: {
-                    'customer.slug_name': new RegExp(stringHandle(req.query.customer_name, { createRegexQuery: true }), 'ig'),
-                },
-            });
-        }
-        if (req.query.customer_phone) {
-            aggregateQuery.push({
-                $match: {
-                    'customer.phone': new RegExp(stringHandle(req.query.customer_phone, { createRegexQuery: true }), 'ig'),
-                },
-            });
-        }
-        if (req.query.employee_name) {
-            aggregateQuery.push({
-                $match: {
-                    'employee.slug_name': new RegExp(stringHandle(req.query.employee_name, { createRegexQuery: true }), 'ig'),
-                },
-            });
-        }
-        aggregateQuery.push({
-            $project: {
-                '_business.password': 0,
-                '_business.slug_name': 0,
-                '_business.slug_address': 0,
-                '_business.slug_district': 0,
-                '_business.slug_province': 0,
-                '_creator.password': 0,
-                '_creator.slug_name': 0,
-                '_creator.slug_address': 0,
-                '_creator.slug_district': 0,
-                '_creator.slug_province': 0,
-            },
-        });
+        
+       
         let countQuery = [...aggregateQuery];
         aggregateQuery.push({ $sort: { create_date: -1 } });
         if (req.query.page && req.query.page_size) {
@@ -312,6 +270,7 @@ module.exports._get = async (req, res, next) => {
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
         // lấy data từ database
+        console.log(req.user.database);
         let [orders, counts] = await Promise.all([
             client.db(req.user.database).collection(`Orders`).aggregate(aggregateQuery).toArray(),
             client

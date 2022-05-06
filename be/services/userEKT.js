@@ -301,13 +301,10 @@ module.exports._getOne = async (req, res, next) => {
             });
         }
         // lấy data từ database
-        let [user] = await client
+        let user = await client
             .db(DB)
             .collection(`UsersEKT`)
-            .aggregate([
-                { $match: { user_id: Number(req.params.user_id) } },
-            ])
-            .toArray();
+            .findOne({phone : req.params.user_phone})
         res.send({
             success: true,
             data: user,
@@ -348,6 +345,7 @@ module.exports._create = async (req, res, next) => {
 
 module.exports._update = async (req, res, next) => {
     try {
+       
         await client.db(DB).collection(`UsersEKT`).updateOne(req.params, { $set: req.body });
         delete req.body.password;
         // try {
@@ -370,7 +368,7 @@ module.exports._update = async (req, res, next) => {
             .db(DB)
             .collection(`UsersEKT`)
             .aggregate([
-                { $match: { user_id: Number(req.params.user_id) } },
+                { $match: { phone: req.params.user_phone } },
             ])
             .toArray();
         delete user.password;

@@ -52,6 +52,7 @@ module.exports._register = async (req, res, next) => {
         let otpCode = String(Math.random()).substr(2, 6);
         let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
         sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
+        
         let [user_id] = await Promise.all([
             client
                 .db(SDB)
@@ -88,6 +89,8 @@ module.exports._register = async (req, res, next) => {
             // last_update: moment().tz(TIMEZONE).format(),
             // updater_id: req.user.user_id,
             active: false,
+            otp_code: otpCode,
+            otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
             // slug_name: removeUnicode(`${req.body.first_name}${req.body.last_name}`, true).toLowerCase(),
             // slug_address: removeUnicode(`${req.body.address}`, true).toLowerCase(),
             // slug_district: removeUnicode(`${req.body.district}`, true).toLowerCase(),
@@ -102,6 +105,8 @@ module.exports._register = async (req, res, next) => {
         .collection('AppSetting')
         .updateOne({ name: 'Users' }, { $set: { name: 'Users', value: user_id } }, { upsert: true })
         res.send({success: true,data: _user});
+
+        console.log(1);
     }catch (err) {
         next(err);
     }
@@ -123,7 +128,7 @@ module.exports._login = async (req, res, next) => {
             throw new Error(`404: Tài khoản không chính xác!`);
         }
         if (user.active == false) {
-            throw new Error(`403: Doanh nghiệp chưa được xác thực!`);
+            throw new Error(`403: Tài khoản chưa được xác thực!`);
         }
         if (!bcrypt.compare(req.body.password, user.password)) {
             res.send({ success: false, message: `Mật khẩu không chính xác!` });
@@ -145,8 +150,8 @@ module.exports._login = async (req, res, next) => {
 
 module.exports._update = async (req, res, next) => {
     try {
-        req.params.user_id = Number(req.params.user_id);
-        let user = await client.db(SDB).collection('UsersEKT').findOne(req.params);
+        
+        let user = await client.db(SDB).collection('UsersEKT').findOne({phone: req.params.user_phone})
         if (!user) {
             throw new Error(`400: Người dùng không tồn tại!`);
         }
@@ -163,7 +168,6 @@ module.exports._update = async (req, res, next) => {
             phone: _user.phone,
             password: _user.password,
             email: _user.email,
-            phone: _user.phone,
             // avatar: _user.avatar,
             // first_name: _user.first_name,
             // last_name: _user.last_name,
@@ -194,9 +198,9 @@ module.exports._update = async (req, res, next) => {
 module.exports._delete = async (req, res, next) => {
     try {
         await client
-            .db(req.user.database)
-            .collection(`Users`)
-            .deleteMany({ user_id: { $in: req.body.user_id } });
+            .db(SDB)
+            .collection(`UsersEKT`)
+            .deleteMany({ user_id: { $in: req.params.user_id } });
         res.send({
             success: true,
             message: 'Xóa người dùng thành công!',
@@ -248,6 +252,7 @@ module.exports._getOTP = async (req, res, next) => {
                 }
             );
         res.send({ success: true, data: `Gửi OTP đến số điện thoại thành công!` });
+        console.log(2);
     } catch (err) {
         next(err);
     }
@@ -266,7 +271,7 @@ module.exports._verifyOTP = async (req, res, next) => {
             throw new Error('400: Tài khoản người dùng không tồn tại!');
         }
         if (req.body.otp_code != user.otp_code) {
-            throw new Error('400: Mã xác thực   chính xác!');
+            throw new Error('400: Mã xác thực không chính xác!');
         }
         if (user.active == false) {
             delete user.password;
@@ -301,6 +306,7 @@ module.exports._verifyOTP = async (req, res, next) => {
                 data: { accessToken: accessToken },
             });
         }
+        console.log(3);
     } catch (err) {
         next(err);
     }
@@ -366,6 +372,24 @@ module.exports._refreshToken = async (req, res, next) => {
             console.log(error);
             throw new Error(`400: Refresh token không chính xác!`);
         }
+    } catch (err) {
+        next(err);
+    }
+};
+module.exports._checkVerifyLink = async (req, res, next) => {
+    try {
+        ['UID'].map((e) => {
+            if (!req.body[e]) {
+                throw new Error(`400: Thiếu thuộc tính ${e}!`);
+            }
+        });
+        let link = await client.db(SDB).collection(`VerifyLinks`).findOne({
+            UID: req.body.UID,
+        });
+        if (!link) {
+            throw new Error('400: UID không tồn tại!');
+        }
+        res.send({ success: true, data: link });
     } catch (err) {
         next(err);
     }

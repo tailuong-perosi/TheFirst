@@ -29,6 +29,7 @@ module.exports.enumStatusShipping = async (req, res, next) => {
 
 module.exports._get = async (req, res, next) => {
     try {
+        console.log("vuot qua auth");
         await orderService._get(req, res, next);
     } catch (err) {
         next(err);
@@ -42,7 +43,7 @@ module.exports._create = async (req, res, next) => {
             let bytes = CryptoJS.AES.decrypt(hmac, 'vierthanhcong');
             let decryptedData = bytes.toString(CryptoJS.enc.Utf8);
             req.body = JSON.parse(decryptedData);
-            console.log(req.body);
+            // console.log(req.body);
         } catch (err) {
             console.log(err);
             throw new Error('400: Đơn hàng không chính xác!');
@@ -423,20 +424,23 @@ module.exports._create = async (req, res, next) => {
          * des:
          * */
 
-        // console.log(req.user._business.business_id);
+        // console.log(req.user._business.business_name);
         // console.log(_order.sale_location.branch_id);
         // console.log(orderId);
-        // console.log(customer.phone);
+        console.log(customer.slug_name);
+        console.log(_order.order_details);
         // Tạo thêm bảng mua của userEKT
-        let _oderEKT = {
-            business_id: req.user._business.business_id,
-            branch_id: _order.sale_location.branch_id,
-            orderId: orderId,
-            user_phone: customer.phone
-        }
-        // req[`body`] = _oderEKT;
-        // await shippingService._create(req,res,next);
-        await client.db(DB).collection('Shopping').insertOne(_oderEKT)
+        // let _oderEKT = {
+        //     business_id: req.user._business.business_id,
+        //     branch_id: _order.sale_location.branch_id,
+        //     orderId: orderId,
+        //     user_phone: customer.phone,
+        //     user_name: customer.slug_name,
+
+        // }
+        // // req[`body`] = _oderEKT;
+        // // await shippingService._create(req,res,next);
+        // await client.db(DB).collection('Shopping').insertOne(_oderEKT)
     } catch (err) {
         next(err);
     }
@@ -451,6 +455,7 @@ module.exports._importFile = async (req, res, next) => {
 
 module.exports._update = async (req, res, next) => {
     try {
+        
         req.params.order_id = Number(req.params.order_id);
         let order = await client.db(req.user.database).collection(`Orders`).findOne(req.params);
         if (!order) {
