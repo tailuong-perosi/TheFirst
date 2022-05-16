@@ -143,6 +143,27 @@ module.exports._get = async (req, res, next) => {
     }
 };
 
+module.exports._getOne = async (req, res, next) => {
+    try {
+        let aggregateQuery = [];
+        // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
+        if (req.params.business_id) {
+            aggregateQuery.push({ $match: { business_id: (req.params.business_id) } });
+        }
+            
+        // lấy data từ database
+        let business = await 
+            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray()
+            
+        res.send({
+            success: true,
+           
+            data: business,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
 module.exports._create = async (req, res, next) => {
     try {
         let insert = await client.db(req.user.database).collection(`Users`).insertOne(req.body);

@@ -424,23 +424,19 @@ module.exports._create = async (req, res, next) => {
          * des:
          * */
 
-        // console.log(req.user._business.business_name);
-        // console.log(_order.sale_location.branch_id);
-        // console.log(orderId);
-        console.log(customer.slug_name);
-        console.log(_order.order_details);
         // Tạo thêm bảng mua của userEKT
-        // let _oderEKT = {
-        //     business_id: req.user._business.business_id,
-        //     branch_id: _order.sale_location.branch_id,
-        //     orderId: orderId,
-        //     user_phone: customer.phone,
-        //     user_name: customer.slug_name,
+        let _oderEKT = {
+            business_id: req.user._business.business_name,
+            business_prefix: req.user._business.prefix,
+            branch_id: _order.sale_location.branch_id,
+            orderId: orderId,
+            user_phone: customer.phone,
+            user_name: customer.slug_name,
 
-        // }
+        }
         // // req[`body`] = _oderEKT;
         // // await shippingService._create(req,res,next);
-        // await client.db(DB).collection('Shopping').insertOne(_oderEKT)
+        await client.db(DB).collection('Shopping').insertOne(_oderEKT)
     } catch (err) {
         next(err);
     }
