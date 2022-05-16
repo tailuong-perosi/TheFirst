@@ -47,25 +47,25 @@ module.exports._getOne = async(req,res,next) =>{
 
 module.exports._create = async (req, res, next) => {
     try {
-        ['business_name', 'password'].map((e) => {
+        ['business_name', 'company_phone'].map((e) => {
             if (!req.body[e]) {
                 throw new Error(`400: Thiếu thuộc tính ${e}!`);
             }
         });
-        if (!req.body.phone && !req.body.username) {
-            throw new Error(`400: Thiếu username hoặc phone`);
+        if (!req.body.company_phone && !req.body.business_name) {
+            throw new Error(`400: Thiếu business_name hoặc phone`);
         }
         req.body.prefix = removeUnicode(req.body.business_name, true).toLowerCase();
-        req.body.username = String(req.body.username || '')
-            .trim()
-            .toLowerCase();
-        // req.body.phone = String(req.body.phone || '')
+        // req.body.username = String(req.body.username || '')
         //     .trim()
         //     .toLowerCase();
+        req.body.company_phone = String(req.body.company_phone || '')
+            .trim()
+            .toLowerCase();
         // req.body.email = String(req.body.email || '')
         //     .trim()
         //     .toLowerCase();
-        req.body.password = bcrypt.hash(req.body.password);
+        // req.body.password = bcrypt.hash(req.body.password);
         
         if (/^((viesoftware)|(admin))$/gi.test(req.body.prefix)) {
             throw new Error(`400: Tên doanh nghiệp đã được sử dụng!`);
@@ -119,24 +119,24 @@ module.exports._create = async (req, res, next) => {
             throw new Error('Kiểm tra thông tin doanh nghiệp không thành công!');
         });
         let otpCode = String(Math.random()).substr(2, 6);
-        // if (req.body.username) {
-        //     let verifyId = crypto.randomBytes(10).toString(`hex`);
-        //     let verifyLink = `https://quantribanhang.viesoftware.vn/verifyaccount?uid=${verifyId}`;
-        //     let _verifyLink = {
-        //         username: req.body.username,
-        //         UID: String(verifyId),
-        //         verify_link: verifyLink,
-        //         verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
-        //     };
-        //     // await Promise.all([
-        //     //     mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink)),
-        //     //     client.db(SDB).collection('VerifyLinks').insertOne(_verifyLink),
-        //     // ]);
-        // }
-        // if (req.body.phone) {
-        //     let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
-        //     sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
-        // }
+        if (req.body.username) {
+            let verifyId = crypto.randomBytes(10).toString(`hex`);
+            let verifyLink = `https://quantribanhang.viesoftware.vn/verifyaccount?uid=${verifyId}`;
+            let _verifyLink = {
+                username: req.body.username,
+                UID: String(verifyId),
+                verify_link: verifyLink,
+                verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
+            };
+            await Promise.all([
+                mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink)),
+                client.db(SDB).collection('VerifyLinks').insertOne(_verifyLink),
+            ]);
+        }
+        if (req.body.phone) {
+            let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
+            sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
+        }
         business_id++;
         system_user_id++;
         let user_id = 1;
@@ -148,6 +148,7 @@ module.exports._create = async (req, res, next) => {
         let _business = {
             business_id: business_id,
             system_user_id: system_user_id,
+            logo:req.body.logo,
             prefix: req.body.prefix,
             business_name: req.body.business_name,
             database_name: DB,
@@ -165,7 +166,7 @@ module.exports._create = async (req, res, next) => {
                 if (req.body.verify_with) {
                     return String(req.body.verify_with).toUpperCase();
                 }
-                if (req.body.phone) {
+                if (req.body.phone) {ư
                     return 'PHONE';
                 }
                 if (req.body.username) {
@@ -173,11 +174,15 @@ module.exports._create = async (req, res, next) => {
                 }
                 return 'PHONE';
             })(),
+            otp_code: otpCode,
+            otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
+            // CMND_CCCD: req.body.CMND,
+            Business_Registration: req.body.Business_Registration || '',
             create_date: moment().tz(TIMEZONE).format(),
             creator_id: user_id,
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: user_id,
-            active: true,
+            active: false,
         };
         
         let _user = {
@@ -456,4 +461,29 @@ module.exports._delete = async (req, res, next) => {
 
 module.exports._getDetail = async(req,res,next)=>{
     
+}
+
+module.exports._Validate = async(req,res,next)=>{
+    try {
+        req.params.business_id = Number(req.params.business_id);
+        let business = await client.db(SDB).collection('Business').findOne(req.params);
+        if (!business) {
+            throw new Error(`400: Doanh nghiệp không tồn tại!`);
+        }
+        delete req.body._id;
+        delete req.body.business_id;
+        delete req.body.system_user_id;
+        delete req.body.database_name;
+        delete req.body.create_date;
+        delete req.body.creator_id;
+        let _business = { ...business, ...req.body };
+        _business = {
+            tax_code: _business.tax_code,
+            Business_Registration: req.body.Business_Registration,
+        };
+        req['body'] = _business;
+        await businessService._update(req, res, next);
+    } catch (err) {
+        next(err);
+    }
 }

@@ -1,9 +1,7 @@
 const moment = require(`moment-timezone`);
 const TIMEZONE = process.env.TIMEZONE;
 const client = require(`../config/mongodb`);
-const SDB = process.env.DATABASE;
-
-const jwt = require(`../libs/jwt`);
+const DB = process.env.DATABASE;
 
 let removeUnicode = (text, removeSpace) => {
     /*
@@ -27,18 +25,15 @@ let removeUnicode = (text, removeSpace) => {
     return text;
 };
 
-module.exports._get = async (req, res, next) => {
+module.exports._get = async (req,res,next) =>{
     try {
         let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-        if (req.query.system_user_id) {
-            aggregateQuery.push({ $match: { system_user_id: Number(req.query.system_user_id) } });
+        if (req.query.permission_id) {
+            aggregateQuery.push({ $match: { permission_id: Number(req.query.permission_id) } });
         }
-        if (req.query.business_id) {
-            aggregateQuery.push({ $match: { business_id: Number(req.query.business_id) } });
-        }
-        if (req.query.system_role_id) {
-            aggregateQuery.push({ $match: { role_id: Number(req.query.role_id) } });
+        if (req.query.creator_id) {
+            aggregateQuery.push({ $match: { creator_id: Number(req.query.creator_id) } });
         }
         if (req.query['today'] != undefined) {
             req.query[`from_date`] = moment().tz(TIMEZONE).startOf('days').format();
@@ -93,28 +88,76 @@ module.exports._get = async (req, res, next) => {
             aggregateQuery.push({ $match: { create_date: { $lte: req.query.to_date } } });
         }
         // lấy các thuộc tính tìm kiếm với độ chính xác tương đối ('1' == '1', '1' == '12',...)
+        if (req.query.name) {
+            aggregateQuery.push({
+                $match: {
+                    slug_name: new RegExp(
+                        `${removeUnicode(req.query.name, false).replace(/(\s){1,}/g, '(.*?)')}`,
+                        'ig'
+                    ),
+                },
+            });
+        }
+        if (req.query.search) {
+            aggregateQuery.push({
+                $match: {
+                    $or: [
+                        {
+                            code: new RegExp(
+                                `${removeUnicode(req.query.search, false).replace(/(\s){1,}/g, '(.*?)')}`,
+                                'ig'
+                            ),
+                        },
+                        {
+                            slug_name: new RegExp(
+                                `${removeUnicode(req.query.search, false).replace(/(\s){1,}/g, '(.*?)')}`,
+                                'ig'
+                            ),
+                        },
+                    ],
+                },
+            });
+        }
         // lấy các thuộc tính tùy chọn khác
         if (req.query._business) {
             aggregateQuery.push(
                 {
                     $lookup: {
-                        from: 'Business',
-                        localField: 'system_user_id',
-                        foreignField: 'system_user_id',
+                        from: 'Users',
+                        localField: 'business_id',
+                        foreignField: 'user_id',
                         as: '_business',
                     },
                 },
                 { $unwind: { path: '$_business', preserveNullAndEmptyArrays: true } }
             );
         }
-
+        if (req.query._creator) {
+            aggregateQuery.push(
+                {
+                    $lookup: {
+                        from: 'Users',
+                        localField: 'creator_id',
+                        foreignField: 'user_id',
+                        as: '_creator',
+                    },
+                },
+                { $unwind: { path: '$_creator', preserveNullAndEmptyArrays: true } }
+            );
+        }
         aggregateQuery.push({
             $project: {
                 slug_name: 0,
-                password: 0,
-                slug_address: 0,
-                slug_district: 0,
-                slug_province: 0,
+                '_business.password': 0,
+                '_business.slug_name': 0,
+                '_business.slug_address': 0,
+                '_business.slug_district': 0,
+                '_business.slug_province': 0,
+                '_creator.password': 0,
+                '_creator.slug_name': 0,
+                '_creator.slug_address': 0,
+                '_creator.slug_district': 0,
+                '_creator.slug_province': 0,
             },
         });
         let countQuery = [...aggregateQuery];
@@ -125,97 +168,20 @@ module.exports._get = async (req, res, next) => {
             aggregateQuery.push({ $skip: (page - 1) * page_size }, { $limit: page_size });
         }
         // lấy data từ database
-        let [business, counts] = await Promise.all([
-            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray(),
+        let [permission, counts] = await Promise.all([
+            client.db(DB).collection(`Permission`).aggregate(aggregateQuery).toArray(),
             client
-                .db(SDB)
-                .collection(`Business`)
+                .db(DB)
+                .collection(`Permission`)
                 .aggregate([...countQuery, { $count: 'counts' }])
                 .toArray(),
         ]);
         res.send({
             success: true,
             count: counts[0] ? counts[0].counts : 0,
-            data: business,
+            data: permission,
         });
     } catch (err) {
-        next(err);
+        console.log(err);
     }
-};
-
-module.exports._getOne = async (req, res, next) => {
-    try {
-        let aggregateQuery = [];
-        // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-        if (req.params.business_id) {
-            aggregateQuery.push({ $match: { business_id: (req.params.business_id) } });
-        }
-            
-        // lấy data từ database
-        let business = await 
-            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray()
-            
-        res.send({
-            success: true,
-           
-            data: business,
-        });
-    } catch (err) {
-        next(err);
-    }
-};
-module.exports._create = async (req, res, next) => {
-    try {
-        let insert = await client.db(req.user.database).collection(`Users`).insertOne(req.body);
-        if (!insert.insertedId) {
-            throw new Error(`500: Tạo user thất bại!`);
-        }
-        delete req.body.password;
-        try {
-            let _action = {
-                business_id: req.user?.business_id || req.body.user_id,
-                type: 'Tạo',
-                properties: 'Tài khoản',
-                name: 'Tạo tài khoản',
-                data: req.body,
-                performer_id: req.user?.user_id || req.body.user_id,
-                date: moment().tz(TIMEZONE).format(),
-                slug_type: 'tao',
-                slug_properties: 'taikhoan',
-                name: 'taotaikhoan',
-            };
-            await Promise.all([client.db(req.user.database).collection(`Actions`).insertOne(_action)]);
-        } catch (err) {
-            console.log(err);
-        }
-        res.send({ success: true, data: req.body });
-    } catch (err) {
-        next(err);
-    }
-};
-
-module.exports._update = async (req, res, next) => {
-    try {
-        await client.db(SDB).collection(`Business`).updateOne(req.params, { $set: req.body });
-        // try {
-        //     let _action = {
-        //         business_id: req.user.business_id,
-        //         type: 'Cập nhật',
-        //         properties: 'Doanh nghiệp',
-        //         name: 'Cập nhật doanh nghiệp',
-        //         data: req.body,
-        //         performer_id: req.user.user_id,
-        //         date: moment().tz(TIMEZONE).format(),
-        //         slug_type: 'capnhat',
-        //         slug_properties: 'doanhnghiep',
-        //         name: 'capnhatdoanhnghiep',
-        //     };
-        //     await client.db(req.user.database).collection(`Actions`).insertOne(_action);
-        // } catch (err) {
-        //     console.log(err);
-        // }
-        res.send({ success: true, data: req.body });
-    } catch (err) {
-        next(err);
-    }
-};
+}

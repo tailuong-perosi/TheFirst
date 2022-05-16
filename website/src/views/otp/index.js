@@ -87,6 +87,7 @@ export default function OTP() {
     if (!location.state) history.push(ROUTES.LOGIN)
   }, [])
 
+  
   return (
     <Row align="middle" className={styles['otp-container']}>
       <img

@@ -16,6 +16,8 @@ import { checkDomain } from 'apis/app'
 import { getBusinesses } from 'apis/business'
 import { refresh } from 'apis/auth'
 
+import HDSB from './views/userEKT/AddBusiness/index'
+
 function App() {
   const history = useHistory()
   const dispatch = useDispatch()
@@ -139,8 +141,11 @@ function App() {
     <>
       <Loading />
       <Views />
+
     </>
+    
   )
+  
 }
 
 export default App

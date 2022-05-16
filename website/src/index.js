@@ -15,15 +15,18 @@ import { I18nextProvider } from 'react-i18next'
 import { ConfigProvider } from 'antd'
 
 ReactDOM.render(
+ 
   <ConfigProvider locale={viVN}>
     <I18nextProvider i18n={i18n}>
-      <Provider store={store}>
-        <PersistGate loading={<div>loading ...</div>} persistor={persistor}>
+      <Provider store={store}> 
+        <PersistGate loading={<div>loading ...</div>} persistor={persistor}> 
           <App />
-        </PersistGate>
-      </Provider>
+         </PersistGate> 
+      </Provider> 
     </I18nextProvider>
-  </ConfigProvider>,
+   </ConfigProvider>,
+  
+  
   document.getElementById('root')
 )
 

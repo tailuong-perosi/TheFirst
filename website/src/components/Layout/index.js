@@ -509,6 +509,7 @@ const BaseLayout = (props) => {
     <Layout style={{ backgroundColor: 'white', height: '100%' }}>
       <BackTop style={{ right: 10, bottom: 15 }} />
 
+      {/* MEnu layout <Sider> */}
       <Sider
         trigger={null}
         collapsible
@@ -581,12 +582,12 @@ const BaseLayout = (props) => {
                 onClick={toggle}
                 style={{ fontSize: 20, marginRight: 18, color: 'white' }}
               />
-              <Permission permissions={[PERMISSIONS.them_cua_hang]}>
+              {/* <Permission permissions={[PERMISSIONS.them_cua_hang]}>
                 <Link
                   to={{ pathname: ROUTES.BRANCH, state: 'show-modal-create-branch' }}
                   style={{ marginRight: '1rem', cursor: 'pointer' }}
                 >
-                  <Button
+                  <Button 
                     type="primary"
                     size="large"
                     style={{
@@ -600,8 +601,10 @@ const BaseLayout = (props) => {
                     <Plus />
                   </Button>
                 </Link>
-              </Permission>
-              <Row align="middle">
+              </Permission> */}
+
+              {/* ô chi nhánh */}
+              {/* <Row align="middle">
                 <div style={{ color: 'white', marginRight: 8 }}>Chi nhánh:</div>
                 <Select
                   // disabled={user && user.role_id === 1 ? false : true}
@@ -616,7 +619,7 @@ const BaseLayout = (props) => {
                     </Select.Option>
                   ))}
                 </Select>
-              </Row>
+              </Row> */}
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
@@ -656,3 +659,4 @@ const BaseLayout = (props) => {
 }
 
 export default React.memo(BaseLayout)
+

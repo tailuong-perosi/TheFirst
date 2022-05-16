@@ -140,3 +140,39 @@ module.exports._delete = async (req, res, next) => {
         next(err);
     }
 };
+
+module.exports._AddRole = async (req, res, next) => {
+    try {
+        req.body.name = String(req.body.name).trim().toUpperCase();
+        let role = await client.db(DB).collection(`Roles`).findOne({
+            name: req.body.name,
+        });
+        if (role) {
+            throw new Error(`400: Vai trò đã tồn tại!`);
+        }
+        let role_id = await client
+            .db(DB)
+            .collection('AppSetting')
+            .findOne({ name: 'Roles' })
+            .then((doc) => {
+                if (doc && doc.value) {
+                    return Number(doc.value);
+                }
+                return 0;
+            });
+        role_id++;
+        let _role = {
+            role_id: role_id,
+            name: req.body.name,
+            create_date: moment().tz(TIMEZONE).format(),
+            creator_id: req.user.user_id,
+            last_update: moment().tz(TIMEZONE).format(),
+            updater_id: req.user.user_id,
+            busines_id: req.user.busines_id
+        }
+        await client.db(DB).collection('Roles').updateOne(_role)
+    }
+    catch(err){
+        console.log(err);
+    }
+}
