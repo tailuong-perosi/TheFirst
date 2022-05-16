@@ -368,7 +368,7 @@ module.exports._update = async (req, res, next) => {
             .db(DB)
             .collection(`UsersEKT`)
             .aggregate([
-                { $match: { phone: req.params.user_phone } },
+                { $match: { user_id: req.params.user_id } },
             ])
             .toArray();
         delete user.password;

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
@@ -171,6 +172,8 @@ export default function OrderList() {
     },
     {
       title: 'Tên sản phẩm',
+
+      
       dataIndex: 'title',
       sorter: (a, b) => compare(a, b, 'title'),
     },

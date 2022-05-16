@@ -1,7 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 import { ROUTES } from 'consts'
+
+import { getshopping, getshoppingone} from 'apis/shopping_dairy'
+
 
 //base layout
 import BaseLayout from 'components/Layout'
@@ -67,17 +70,8 @@ import OfferListCreate from './offer-list-create'
 import Blog from './blog'
 import BlogCreate from './blog-create'
 import Brand from './brand'
-import SettingBill from './setting-bill'
-import BrandCreate from './brand-create'
-import Channel from './channel'
-import Contact from './contact'
-import ImportInventories from './import-inventories'
-import ImportInventory from './import-inventory'
-import ImportReportFile from './import-report-file'
-import DeliveryControl from './delivery-control'
-import ShippingForm from './shipping/shipping-form'
-import ShippingFormGHTK from './shipping/shipping-ghtk'
-import ShippingFormGHN from './shipping/shipping-ghn'
+
+
 const DEFINE_ROUTER = [
   {
     path: ROUTES.PRODUCT_CHECK,
@@ -559,11 +553,13 @@ const AUTH_ROUTER = [
 ]
 
 export default function Views() {
+  
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/" exact={true}>
-          <Redirect to={ROUTES.OVERVIEW} />
+          <Redirect to={ROUTES.OVERVIEW}  
+          />
         </Route>
 
         {DEFINE_ROUTER.map(({ Component, ...rest }, index) => (

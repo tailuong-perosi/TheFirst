@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import styles from './layout.module.scss'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,6 +21,9 @@ import {
   Row,
   Popover,
   Col,
+  Input,
+  Space
+
 } from 'antd'
 
 import {
@@ -53,9 +57,9 @@ import ModalUpdateUser from './modal-user'
 import DropdownLanguage from 'components/dropdown-language'
 
 //apis
-import { updateEmployee, getEmployees } from 'apis/employee'
+import { getuserEKT } from 'apis/userEKT'
 import { getAllBranch } from 'apis/branch'
-
+const { Search } = Input;
 const { Sider } = Layout
 const BaseLayout = (props) => {
   const history = useHistory()
@@ -74,9 +78,9 @@ const BaseLayout = (props) => {
   const triggerReloadBranch = useSelector((state) => state.branch.trigger)
   const setting = useSelector((state) => state.setting)
 
-  const dataUser = localStorage.getItem('accessToken')
-    ? jwt_decode(localStorage.getItem('accessToken'))
-    : {}
+  // const dataUser = localStorage.getItem('accessToken')
+  //   ? jwt_decode(localStorage.getItem('accessToken'))
+  //   : {}
 
   const isCollapsed = localStorage.getItem('collapsed')
     ? JSON.parse(localStorage.getItem('collapsed'))
@@ -103,22 +107,16 @@ const BaseLayout = (props) => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : [])
     }
   }
+  const dataUser = localStorage.getItem('accessToken')
+    ? jwt_decode(localStorage.getItem('accessToken'))
+    : {}
 
   const getInfoUser = async (params) => {
     try {
-      const res = await getEmployees(params)
+      const res = await getuserEKT(params)
       if (res.status === 200) {
         if (res.data.data.length) setUser({ ...res.data.data[0] })
       }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const _getBranches = async () => {
-    try {
-      const res = await getAllBranch()
-      if (res.status === 200) setBranches(res.data.data)
     } catch (error) {
       console.log(error)
     }
@@ -137,6 +135,13 @@ const BaseLayout = (props) => {
       permissions: [PERMISSIONS.tong_quan],
       icon: <DashboardOutlined />,
     },
+    // {
+    //   pathsChild: [],
+    //   path: ROUTES.OVERVIEW,
+    //   title: 'Tổng quan',
+    //   permissions: [PERMISSIONS.tong_quan],
+    //   icon: <DashboardOutlined />,
+    // },
     {
       pathsChild: [],
       path: ROUTES.SELL,
@@ -144,227 +149,13 @@ const BaseLayout = (props) => {
       permissions: [PERMISSIONS.ban_hang],
       icon: <ShoppingCartOutlined />,
     },
-    {
-      pathsChild: [ROUTES.ORDER_CREATE],
-      path: ROUTES.ORDER_LIST,
-      title: 'Đơn hàng',
-      permissions: [PERMISSIONS.danh_sach_don_hang],
-      icon: <ShoppingOutlined />,
-    },
-    {
-      path: ROUTES.DELIVERY_CONTROL,
-      title: 'Giao hàng',
-      permissions: [PERMISSIONS.quan_li_chuyen_hang],
-      icon: (
-        <svg
-          style={{ width: 14, height: 14 }}
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 640 512"
-        >
-          <path d="M112 0C85.49 0 64 21.49 64 48V96H16C7.163 96 0 103.2 0 112C0 120.8 7.163 128 16 128H272C280.8 128 288 135.2 288 144C288 152.8 280.8 160 272 160H48C39.16 160 32 167.2 32 176C32 184.8 39.16 192 48 192H240C248.8 192 256 199.2 256 208C256 216.8 248.8 224 240 224H16C7.163 224 0 231.2 0 240C0 248.8 7.163 256 16 256H208C216.8 256 224 263.2 224 272C224 280.8 216.8 288 208 288H64V416C64 469 106.1 512 160 512C213 512 256 469 256 416H384C384 469 426.1 512 480 512C533 512 576 469 576 416H608C625.7 416 640 401.7 640 384C640 366.3 625.7 352 608 352V237.3C608 220.3 601.3 204 589.3 192L512 114.7C499.1 102.7 483.7 96 466.7 96H416V48C416 21.49 394.5 0 368 0H112zM544 237.3V256H416V160H466.7L544 237.3zM160 464C133.5 464 112 442.5 112 416C112 389.5 133.5 368 160 368C186.5 368 208 389.5 208 416C208 442.5 186.5 464 160 464zM528 416C528 442.5 506.5 464 480 464C453.5 464 432 442.5 432 416C432 389.5 453.5 368 480 368C506.5 368 528 389.5 528 416z" />
-        </svg>
-      ),
-      pathsChild: [],
-    },
-    {
-      pathsChild: [ROUTES.PRODUCT_ADD, ROUTES.PRODUCT_UPDATE],
-      icon: <CalendarOutlined />,
-      path: ROUTES.PRODUCT,
-      title: 'Sản phẩm',
-      permissions: [PERMISSIONS.san_pham],
-      menuItems: [
-        {
-          path: ROUTES.REPORT_INVENTORY,
-          title: 'Tồn kho theo S/P',
-          permissions: [],
-          pathsChild: [],
-        },
-        {
-          path: ROUTES.REPORT_VARIANT,
-          title: 'Tồn kho theo thuộc tính',
-          permissions: [],
-          pathsChild: [],
-        },
-        {
-          path: ROUTES.REPORT_IMPORT_EXPORT_INVENTORY_PRODUCT,
-          title: 'Xuất/Nhập tồn S/P',
-          permissions: [],
-          pathsChild: [],
-        },
-        {
-          path: ROUTES.REPORT_IMPORT_EXPORT_INVENTORY_VARIANT,
-          title: 'Xuất/Nhập tồn thuộc tính',
-          permissions: [],
-          pathsChild: [],
-        },
-      ],
-    },
-    {
-      pathsChild: [ROUTES.CATEGORY],
-      path: ROUTES.CATEGORIES,
-      title: 'Nhóm sản phẩm',
-      permissions: [PERMISSIONS.nhom_san_pham],
-      icon: <SlidersOutlined />,
-    },
-    {
-      pathsChild: [],
-      icon: <ShopOutlined />,
-      path: ROUTES.BRANCH_MANAGEMENT,
-      title: 'Chi nhánh',
-      permissions: [PERMISSIONS.quan_li_chi_nhanh],
-    },
-    {
-      icon: <MedicineBoxOutlined />,
-      path: ROUTES.IMPORT_INVENTORIES,
-      title: 'Nhập hàng',
-      permissions: [PERMISSIONS.nhap_hang],
-      pathsChild: [ROUTES.IMPORT_INVENTORY],
-    },
-    {
-      icon: <FileSearchOutlined />,
-      path: ROUTES.STOCK_ADJUSTMENTS,
-      title: 'Kiểm hàng',
-      permissions: [PERMISSIONS.kiem_hang_cuoi_ngay],
-      pathsChild: [ROUTES.STOCK_ADJUSTMENTS_CREATE, ROUTES.STOCK_ADJUSTMENTS_UPDATE],
-    },
-    {
-      pathsChild: [],
-      icon: <GoldOutlined />,
-      path: ROUTES.SUPPLIER,
-      title: 'Nhà cung cấp',
-      permissions: [PERMISSIONS.quan_li_nha_cung_cap],
-    },
     // {
-    //   icon: <CodeSandboxOutlined />,
-    //   path: ROUTES.STOCK_ADJUSTMENTS,
-    //   title: 'Kiểm hàng',
-    //   permissions: [PERMISSIONS.],
-    //   pathsChild: [],
+    //   pathsChild: [ROUTES.ORDER_CREATE],
+    //   path: ROUTES.ORDER_LIST,
+    //   title: 'Đơn hàng',
+    //   permissions: [PERMISSIONS.danh_sach_don_hang],
+    //   icon: <ShoppingOutlined />,
     // },
-    {
-      icon: <RotateLeftOutlined />,
-      path: ROUTES.SHIPPING_PRODUCT,
-      title: 'Phiếu chuyển hàng',
-      permissions: [PERMISSIONS.phieu_chuyen_hang],
-      pathsChild: [ROUTES.SHIPPING_PRODUCT_ADD],
-    },
-    // {
-    //   path: 'offer',
-    //   title: 'Quản lý ưu đãi',
-    //   permissions: [PERMISSIONS.],
-    //   icon: <ControlOutlined />,
-    //   pathsChild: [],
-    //   menuItems: [
-    // {
-    //   icon: <ControlOutlined />,
-    //   path: ROUTES.OFFER_LIST,
-    //   title: 'Quản lý ưu đãi',
-    //   permissions: [PERMISSIONS.],
-    // },
-    //   ],
-    // },
-    // {
-    //   path: 'commerce',
-    //   title: 'Thương mại',
-    //   permissions: [PERMISSIONS.],
-    //   icon: <ControlOutlined />,
-    //   menuItems: [
-    //     {
-    //       path: ROUTES.BLOG,
-    //       title: 'Quản lý bài viết',
-    //       permissions: [PERMISSIONS.],
-    //       icon: <FileDoneOutlined />,
-    //     },
-    //     {
-    //       path: ROUTES.BRAND,
-    //       title: 'Quản lý thương hiệu',
-    //       permissions: [PERMISSIONS.],
-    //       icon: <SketchOutlined />,
-    //     },
-    //     {
-    //       path: ROUTES.CHANNEL,
-    //       title: 'Quản lý kênh',
-    //       permissions: [PERMISSIONS.],
-    //       icon: <ForkOutlined />,
-    //     },
-    //   ],
-    // },
-
-    // {
-    //   path: ROUTES.CONTACT,
-    //   title: 'Liên hệ',
-    //   permissions: [PERMISSIONS.],
-    // pathsChild: [],
-    //   icon: <ContactsOutlined />,
-    // },
-    {
-      pathsChild: [],
-      path: ROUTES.CUSTOMER,
-      title: 'Khách hàng',
-      permissions: [PERMISSIONS.quan_li_khach_hang],
-      icon: <UserAddOutlined />,
-    },
-    {
-      pathsChild: [
-        ROUTES.RECEIPTS_PAYMENT,
-        ROUTES.REPORT_INVENTORY,
-        ROUTES.REPORT_VARIANT,
-        ROUTES.SALES_REPORT,
-        ROUTES.SALES_REPORT,
-        ROUTES.REPORT_IMPORT_EXPORT_INVENTORY_PRODUCT,
-        ROUTES.REPORT_IMPORT_EXPORT_INVENTORY_VARIANT,
-      ],
-      path: ROUTES.REPORTS,
-      title: 'D/S Báo cáo',
-      permissions: [],
-      icon: <LineChartOutlined />,
-    },
-    {
-      path: ROUTES.SHIPPING_CONTROL,
-      title: 'Đối soát V/C',
-      permissions: [PERMISSIONS.doi_soat_van_chuyen],
-      icon: <CarOutlined />,
-      pathsChild: [ROUTES.SHIPPING_CONTROL_ADD],
-    },
-    // {
-    //   path: ROUTES.CLIENT_MANAGEMENT,
-    //   title: 'Quản lý client',
-    //   permissions: [PERMISSIONS.],
-    //   icon: <CarOutlined />,
-    //   pathsChild: [],
-    // },
-    {
-      pathsChild: [
-        ROUTES.EMPLOYEE,
-        ROUTES.GUARANTEE,
-        ROUTES.TAX,
-        ROUTES.PAYMENT,
-        ROUTES.ACTIVITY_DIARY,
-        ROUTES.SHIPPING,
-        ROUTES.POINT,
-        ROUTES.PROMOTION,
-        ROUTES.IMPORT_REPORT_FILE,
-        ROUTES.ROLE,
-      ],
-      path: ROUTES.CONFIGURATION_STORE,
-      title: 'Cấu hình',
-      permissions: [PERMISSIONS.cau_hinh_thong_tin],
-      icon: <ControlOutlined />,
-    },
-    {
-      pathsChild: [],
-      path: ROUTES.SETTING,
-      title: 'Cài đặt',
-      permissions: [],
-      icon: <SettingOutlined />,
-    },
-    {
-      pathsChild: [],
-      path: ROUTES.SETTING_BILL,
-      title: 'Cài đặt máy in bill',
-      permissions: [],
-      icon: <PrinterOutlined />,
-    },
   ]
 
   const renderMenuItem = (_menu) => (
@@ -383,7 +174,7 @@ const BaseLayout = (props) => {
           }}
           key={_menu.path}
           // onTitleClick={() => history.push(_menu.path)}
-          onClick={_menu.path === ROUTES.SELL && toggle}
+          onClick={_menu.path === ROUTES.OVERVIEW && toggle}
           title={
             <Link
               style={{
@@ -448,6 +239,8 @@ const BaseLayout = (props) => {
     </Permission>
   )
 
+  const onSearch = (value) => console.log(value)
+
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
     dispatch({ type: 'UPDATE_INVOICE', data: [] })
@@ -463,7 +256,10 @@ const BaseLayout = (props) => {
     <div className={styles['user_information']}>
       <ModalUpdateUser user={user} reload={getInfoUser}>
         <div>
-          <div style={{ color: '#565656', paddingLeft: 10 }}>
+          <div
+            style={{ color: '#565656', paddingLeft: 10 }}
+            // onClick={getInfoUser}
+          >
             <UserOutlined style={{ fontSize: '1rem', marginRight: 10, color: ' #565656' }} />
             Tài khoản của tôi
           </div>
@@ -483,15 +279,23 @@ const BaseLayout = (props) => {
   const NotifyContent = () => (
     <div className={styles['notificationBox']}>
       <div className={styles['title']}>Thông báo</div>
-      <div className={styles['content']}>
+      {/* <div className={styles['content']}>
         <Empty />
-      </div>
+      </div> */}
+    </div>
+  )
+  const SettingOutlined = () => (
+    <div className={styles['notificationBox']}>
+      {/* <div className={styles['title']}></div> */}
+      {/* <div className={styles['content']}>
+        <Empty />
+      </div> */}
     </div>
   )
 
-  useEffect(() => {
-    _getBranches()
-  }, [triggerReloadBranch])
+  // useEffect(() => {
+  //   _getBranches()
+  // }, [triggerReloadBranch])
 
   useEffect(() => {
     getInfoUser({ user_id: dataUser.data.user_id })
@@ -530,10 +334,15 @@ const BaseLayout = (props) => {
             paddingBottom: 20,
           }}
         >
-          <img
-            src={setting && setting.company_logo ? setting.company_logo : LOGO_DEFAULT}
+          {/* <img
+            // src={setting && setting.company_logo ? setting.company_logo : LOGO_DEFAULT}
             style={{ objectFit: 'contain', maxHeight: 70, width: '100%' }}
+            src={user && (user.avatar || '')}
             alt=""
+          /> */}
+          <Avatar
+            src={user && (user.avatar || '')}
+            style={{ color: '#FFF', backgroundColor: '#FDAA3E', width: 80, height: 80 }}
           />
         </Row>
         <Menu
@@ -552,11 +361,35 @@ const BaseLayout = (props) => {
           mode="inline"
         >
           {MENUS.map(renderMenuItem)}
+          <Menu.Item
+            key={ROUTES.OVERVIEW}
+            // onClick={onSignOut}
+            icon={<DashboardOutlined />}
+          >
+            <Link to={ROUTES.OVERVIEW}>Tổng quan</Link>
+          </Menu.Item>
+          <Menu.Item
+            key={ROUTES.BRAND}
+            // onClick={onSignOut}
+            icon={<DashboardOutlined />}
+          >
+            <Link to={ROUTES.BRAND}>Cửa hàng</Link>
+          </Menu.Item>
+          {/* <Menu.Item key={ROUTES.CUSTOMER} 
+            // onClick={onSignOut} 
+            icon={<LogoutOutlined />}>
+            <Link to={ROUTES.CUSTOMER}>Cá nhân</Link>
+          </Menu.Item> 
+          <Menu.Item key={ROUTES.BRANCH_MANAGEMENT} 
+            // onClick={onSignOut} 
+            icon={<LogoutOutlined />}>
+            <Link to={ROUTES.BRANCH_MANAGEMENT}>Cửa hàng</Link>
+          </Menu.Item>  */}
           <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
             <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
           </Menu.Item>
         </Menu>
-      </Sider>
+      </Sider>  
       <Layout style={{ marginLeft: collapsed ? WIDTH_MENU_CLOSE : WIDTH_MENU_OPEN }}>
         <Affix offsetTop={0}>
           <Row
@@ -601,7 +434,7 @@ const BaseLayout = (props) => {
                   </Button>
                 </Link>
               </Permission>
-              <Row align="middle">
+              {/* <Row align="middle">
                 <div style={{ color: 'white', marginRight: 8 }}>Chi nhánh:</div>
                 <Select
                   // disabled={user && user.role_id === 1 ? false : true}
@@ -616,7 +449,18 @@ const BaseLayout = (props) => {
                     </Select.Option>
                   ))}
                 </Select>
-              </Row>
+              </Row> */}
+              <Search
+              // className={'ant-input-group-addon'}
+                placeholder="Tìm kiếm"
+                allowClear
+                enterButton="Search"
+                size="large"
+                style={{ width: 240 }}
+                onSearch={onSearch}
+              />
+              
+               {/* <Search  style={{ width: 240 }} placeholder="input search text" onSearch={onSearch} enterButton /> */}
             </Row>
             <Row wrap={false} align="middle" style={{ marginRight: 10 }}>
               <DropdownLanguage />
@@ -626,6 +470,7 @@ const BaseLayout = (props) => {
                     <Bell style={{ color: 'rgb(253, 170, 62)', cursor: 'pointer' }} />
                   </Badge>
                 </Dropdown>
+
               </div>
               <Dropdown overlay={content} trigger="click">
                 <Row align="middle" wrap={false} style={{ cursor: 'pointer' }}>
@@ -642,7 +487,7 @@ const BaseLayout = (props) => {
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    {user && (user.first_name || '') + ' ' + (user.last_name || '')}
+                    {user && (user.fullname || '...')}
                   </span>
                 </Row>
               </Dropdown>

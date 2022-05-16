@@ -5,6 +5,7 @@ let auth = async (req, res, next) => {
     try {
         let token = req.headers[`authorization`];
         if (token) {
+  
             try {
                 const decoded = await jwt.verifyToken(token);
                 req[`user`] = decoded.data;

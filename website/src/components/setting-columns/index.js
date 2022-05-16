@@ -11,11 +11,11 @@ export default function SettingColumns({
   columnsDefault,
   nameColumn,
   width = 700,
-  btn = (
-    <Button icon={<SettingOutlined />} type="primary" size="large">
-      Điều chỉnh cột
-    </Button>
-  ),
+  // btn = (
+  //   <Button icon={<SettingOutlined />} type="primary" size="large">
+  //     Điều chỉnh cột
+  //   </Button>
+  // ),
 }) {
   const [visible, setVisible] = useState(false)
 
@@ -30,7 +30,7 @@ export default function SettingColumns({
 
   return (
     <>
-      <div onClick={toggle}>{btn}</div>
+      {/* <div onClick={toggle}>{btn}</div> */}
 
       <Modal
         width={width}

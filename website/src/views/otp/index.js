@@ -7,7 +7,7 @@ import jwt_decode from 'jwt-decode'
 import delay from 'delay'
 
 //apis
-import { verify, getOtp } from 'apis/auth'
+import { verify, getOtp } from 'apis/userEKT'
 
 //antd
 import { Form, Input, Button, notification, Row, Col } from 'antd'
@@ -21,35 +21,43 @@ export default function OTP() {
   let location = useLocation()
   const [form] = Form.useForm()
 
-  const username = location.state && (location.state.username || '')
+  const phone = location.state && (location.state.phone || '')
 
   const _verifyAccount = async () => {
     try {
       await form.validateFields()
       dispatch({ type: ACTION.LOADING, data: true })
       const dataForm = form.getFieldsValue()
-      var body = { username: username, otp_code: dataForm.otp }
+      var body = { phone: phone, otp_code: dataForm.otp }
       const res = await verify(body)
       dispatch({ type: ACTION.LOADING, data: false })
       console.log(res)
       if (res.status === 200) {
         if (res.data.success) {
           notification.success({ message: 'Xác thực otp thành công' })
+          dispatch({ type: ACTION.LOGIN, data: res.data.data })
+
 
           if (location.state.action && location.state.action === 'FORGOT_PASSWORD') {
-            history.push({ pathname: ROUTES.PASSWORD_NEW, state: { username } })
+            history.push({ pathname: ROUTES.PASSWORD_NEW, state: { phone } })
             return
           }
 
-          dispatch({ type: ACTION.LOGIN, data: res.data.data })
+          // dispatch({ type: ACTION.LOGIN, data: res.data.data })
 
           //luu branch id len redux
-          const dataUser = jwt_decode(res.data.data.accessToken)
-          localStorage.setItem('accessToken', res.data.data.accessToken)
-          dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
+          // const dataUser = jwt_decode(res.data.data.accessToken)
+          // localStorage.setItem('accessToken', res.data.data.accessToken)
+          // dispatch({ type: 'SET_BRANCH_ID', data: dataUser.data.store_id })
 
-          await delay(300)
-          window.location.href = `https://${dataUser.data._business.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
+          // await delay(300)
+          const dataUser = jwt_decode(res.data.data.accessToken)
+
+          window.location.href = `http://${dataUser.data._user.prefix}.${
+            process.env.REACT_APP_HOST
+          }${ROUTES.LOGIN}?token=${JSON.stringify(res.data.data)}`
+
+          // window.location.href = `https://${dataUser.data._user.prefix}.${process.env.REACT_APP_HOST}${ROUTES.OVERVIEW}`
         } else
           notification.warning({
             message:
@@ -70,7 +78,7 @@ export default function OTP() {
   const _resendOtp = async () => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await getOtp(username)
+      const res = await getOtp(phone)
       if (res.status === 200) {
         if (res.data.success)
           notification.success({ message: 'Gửi lại otp thành công, vui lòng kiểm tra lại' })
@@ -113,7 +121,7 @@ export default function OTP() {
             Mã OTP đã được gửi vào{' '}
             {
               <i>
-                <b>{username}</b>
+                <b>{phone}</b>
               </i>
             }{' '}
             của bạn

@@ -9,7 +9,7 @@ import { Row, Col, Form, Input, Button, notification, Tabs } from 'antd'
 
 //apis
 import { checkDomain } from 'apis/app'
-import { checkBusiness } from 'apis/auth'
+import { checkBusiness } from 'apis/userEKT'
 
 export default function CheckSubdomain() {
   const dispatch = useDispatch()
@@ -21,10 +21,10 @@ export default function CheckSubdomain() {
   const _checkSubdomain = async (body) => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await checkBusiness(body.username)
+      const res = await checkBusiness(body.phone)
       if (res.status === 200) {
         if (res.data.data)
-          window.location.href = `http://${res.data.data.prefix}.${process.env.REACT_APP_HOST}${ROUTES.LOGIN}?username=${body.username}`
+          window.location.href = `http://${res.data.data.prefix}.${process.env.REACT_APP_HOST}${ROUTES.LOGIN}?phone=${body.phone}`
         else
           notification.warning({
             message: 'Bạn chưa đăng ký doanh nghiệp!',
@@ -82,7 +82,7 @@ export default function CheckSubdomain() {
                 >
                   <Form.Item
                     label={<div style={{ color: 'white' }}>Số điện thoại</div>}
-                    name="username"
+                    name="phone"
                     rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                   >
                     <Input size="large" placeholder="Nhập số điện thoại" />

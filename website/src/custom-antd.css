@@ -229,3 +229,9 @@
   padding: 10px 0px !important;
 }
 /* Collapse Panel */
+
+
+/* input search*/
+ .ant-input-group-addon {
+  background-color: #192da0;
+}

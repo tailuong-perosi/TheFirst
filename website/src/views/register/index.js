@@ -13,7 +13,7 @@ import logoRegister from 'assets/img/logoRegister.svg'
 import { Row, Col, Form, Input, Button, notification, Tabs, InputNumber } from 'antd'
 
 //apis
-import { register } from 'apis/auth'
+import { register } from 'apis/userEKT'
 
 export default function Login() {
   const dispatch = useDispatch()
@@ -23,47 +23,47 @@ export default function Login() {
   const _register = async (dataForm) => {
     try {
       /*check validated form*/
-      const regexPassword =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/
+      // const regexPassword =
+      //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()?])[A-Za-z\d!@#$%^&*()?]{8,}$/
 
-      if (!regexPassword.test(dataForm.password)) {
-        notification.error({
-          message:
-            'Mật khẩu không được chứa dấu và tối thiểu 8 ký tự, ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt',
-        })
-        return
-      }
+      // if (!regexPassword.test(dataForm.password)) {
+      //   notification.error({
+      //     message:
+      //       'Mật khẩu không được chứa dấu và tối thiểu 8 ký tự, ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt',
+      //   })
+      //   return
+      // }
       if (dataForm.password !== dataForm.passwordAgain) {
         notification.error({ message: 'Mật khẩu và nhập lại mật khẩu phải giống nhau' })
         return
       }
-      const phone =
-        (dataForm.username + '')[0] + (dataForm.username + '')[1] === '84'
-          ? '0' + (dataForm.username + '').slice(2, (dataForm.username + '').length)
-          : dataForm.username + ''
+      // const phone = /([+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})\b/;
+      // (dataForm.phone + '')[0] + (dataForm.phone + '')[1] === '84'
+      //   ? '0' + (dataForm.phone + '').slice(2, (dataForm.phone + '').length)
+      //   : dataForm.phone + ''
 
-      if (dataForm.username && !validatePhone(phone)) {
-        notification.error({ message: 'Vui lòng nhập số điện thoại đúng định dạng' })
-        return
-      }
+      // if (dataForm.phone && !validatePhone(phone)) {
+      //   notification.error({ message: 'Vui lòng nhập số điện thoại đúng định dạng' })
+      //   return
+      // }
       delete dataForm.passwordAgain
       const body = {
         ...dataForm,
-        avatar: '',
-        business_name: dataForm.business_name,
-        first_name: '',
-        last_name: dataForm.business_name,
-        birthday: '',
-        address: '',
-        ward: '',
-        district: '',
-        province: '',
-        company_name: '',
-        company_website: '',
-        tax_code: '',
-        fax: '',
-        branch: '',
-        business_areas: '',
+        // avatar: '',
+        // business_name: dataForm.business_name,
+        // first_name: '',
+        // last_name: dataForm.business_name,
+        // birthday: '',
+        // address: '',
+        // ward: '',
+        // district: '',
+        // province: '',
+        // company_name: '',
+        // company_website: '',
+        // tax_code: '',
+        // fax: '',
+        // branch: '',
+        // business_areas: '',
       }
 
       dispatch({ type: ACTION.LOADING, data: true })
@@ -103,7 +103,7 @@ export default function Login() {
                   <img style={{ maxWidth: 120, maxHeight: 120 }} src={logoRegister} alt="logo" />
                 </div>
                 <h2>Đăng ký tài khoản miễn phí</h2>
-                <h2>để bắt đầu bán hàng</h2>
+                <h2>để bắt đầu theo dõi đơn hàng và tạo gian hàng riêng của mình!</h2>
               </div>
             }
             key="register"
@@ -112,7 +112,7 @@ export default function Login() {
               <div className={styles['registration-content--form']}>
                 <Form layout="vertical" form={formRegister} onFinish={_register}>
                   <Row className="edit-form-item-register" gutter={[20, 20]}>
-                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                    {/* <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <Form.Item
                         name="business_name"
                         rules={[{ required: true, message: 'Vui lòng nhập tên doanh nghiệp' }]}
@@ -124,11 +124,17 @@ export default function Login() {
                           placeholder="Nhập tên doanh nghiệp"
                         />
                       </Form.Item>
-                    </Col>
+                    </Col> */}
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <Form.Item
-                        name="username"
-                        rules={[{ required: true, message: 'Vui lòng nhập số điện thoại' }]}
+                        name="phone"
+                        rules={[
+                          { required: true, message: 'Vui lòng nhập số điện thoại' },
+                          {
+                            pattern: new RegExp(/([+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})\b/),
+                            message: 'Vui lòng nhập số điện thoại đúng định dạng',
+                          },
+                        ]}
                       >
                         <Input
                           type="number"
@@ -193,7 +199,7 @@ export default function Login() {
                             marginTop: 10,
                             marginRight: '20%',
                           }}
-                          onClick={() => history.push(ROUTES.CHECK_SUBDOMAIN)}
+                          onClick={() => history.push(ROUTES.LOGIN)}
                         >
                           Đi đến trang đăng nhập
                         </div>

@@ -2,7 +2,7 @@ const http = require(`http`);
 const https = require(`https`);
 const fs = require(`fs`);
 require(`dotenv`).config();
-require('./config/socket');
+// require('./config/socket');
 
 const client = require(`./config/mongodb`);
 const app = require(`./app`);

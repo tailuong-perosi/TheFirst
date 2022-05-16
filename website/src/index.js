@@ -22,7 +22,7 @@ ReactDOM.render(
           <App />
         </PersistGate>
       </Provider>
-    </I18nextProvider>
+    </I18nextProvider>,
   </ConfigProvider>,
   document.getElementById('root')
 )

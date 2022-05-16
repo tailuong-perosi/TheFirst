@@ -3,7 +3,7 @@ import { ROUTES } from 'consts'
 
 import { useLocation, useHistory } from 'react-router'
 import { notification, Row, Spin } from 'antd'
-import { checkLink } from 'apis/auth'
+import { checkLink } from 'apis/userEKT'
 
 export default function VerifyAccount() {
   const location = useLocation()

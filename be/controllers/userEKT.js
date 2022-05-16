@@ -10,6 +10,7 @@ const mail = require(`../libs/nodemailer`);
 const { otpMail } = require('../templates/otpMail');
 const { verifyMail } = require('../templates/verifyMail');
 const { sendSMS } = require('../libs/sendSMS');
+const { stringHandle } = require('../utils/string-handle');
 
 const UserEKTService = require(`../services/userEKT`);
 
@@ -35,11 +36,57 @@ let removeUnicode = (text, removeSpace) => {
     return text;
 };
 // let user_id=0;
+module.exports._checkBusiness = async (req, res, next) => {
+    try {
+        if (req.body.phone == undefined) throw new Error('400: Vui lòng truyền số điện thoại');
+
+        var user = await client.db(SDB).collection('UsersEKT').findOne({
+            phone: req.body.phone,
+        });
+        return res.send({ success: true, data: user });
+    } catch (err) {
+        next(err);
+    }
+    console.log(4);
+
+};
+
+module.exports._checkVerifyLink = async (req, res, next) => {
+    try {
+        ['UID'].map((e) => {
+            if (!req.body[e]) {
+                throw new Error(`400: Thiếu thuộc tính ${e}!`);
+            }
+        });
+        let link = await client.db(SDB).collection(`VerifyLinks`).findOne({
+            UID: req.body.UID,
+        });
+        if (!link) {
+            throw new Error('400: UID không tồn tại!');
+        }
+        res.send({ success: true, data: link });
+    } catch (err) {
+        next(err);
+    }
+};
 
 module.exports._register = async (req, res, next) => {
     try {
+        [ 'phone', 'email', 'password'].map((e) => {
+            if (!req.body[e]) {
+                throw new Error(`400: Thiếu thuộc tính ${e}!`);
+            }
+        });
+
+        req.body.prefix = stringHandle(req.body.phone, {
+            removeUnicode: true,
+            removeSpace: true,
+            lowerCase: true,
+        });
         req.body.phone = String(req.body.phone).trim().toLowerCase();
         req.body.password = bcrypt.hash(req.body.password);
+        let userEKT = await client.db(SDB).collection('UsersEKT').findOne({ prefix: req.body.prefix });
+
         let user = await client
             .db(SDB)
             .collection('UsersEKT')
@@ -50,6 +97,15 @@ module.exports._register = async (req, res, next) => {
             throw new Error('400: Số điện thoại hoặc email đã được sử dụng!');
         }
         let otpCode = String(Math.random()).substr(2, 6);
+        let verifyId = crypto.randomBytes(10).toString(`hex`);
+        let verifyLink = `https://${req.body.prefix}.${process.env.DOMAIN}/verify-account?uid=${verifyId}`;
+        let _verifyLink = {
+            phone: req.body.phone,
+            UID: String(verifyId),
+            verify_link: verifyLink,
+            verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
+        };
+
         let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
         sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
         
@@ -71,30 +127,19 @@ module.exports._register = async (req, res, next) => {
         let _user = {
             user_id: user_id,
             code: String(user_id).padStart(6, '0'),
+            prefix: req.body.prefix,
             phone: req.body.phone,
             password: req.body.password,
             email: req.body.email,
+            fullname: req.body.fullname,
+            address: req.body.address,
+            job: req.body.job,
+            avatar: req.body.avatar || 'https://images.hdqwalls.com/download/doctor-strange-comic-hero-z5-2560x1600.jpg',
             phone: req.body.phone,
-            // avatar: req.body.avatar,
-            // first_name: req.body.first_name,
-            // last_name: req.body.last_name,
-            // name: req.body.first_name || '' + req.body.last_name || '',
-            // birth_day: req.body.birth_day,
-            // address: req.body.address,
-            // district: req.body.district,
-            // store_id: req.body.store_id,
-            // last_login: moment().tz(TIMEZONE).format(),
-            // create_date: moment().tz(TIMEZONE).format(),
-            // creator_id: req.user.user_id,
-            // last_update: moment().tz(TIMEZONE).format(),
-            // updater_id: req.user.user_id,
             active: false,
             otp_code: otpCode,
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
-            // slug_name: removeUnicode(`${req.body.first_name}${req.body.last_name}`, true).toLowerCase(),
-            // slug_address: removeUnicode(`${req.body.address}`, true).toLowerCase(),
-            // slug_district: removeUnicode(`${req.body.district}`, true).toLowerCase(),
-            // slug_province: removeUnicode(`${req.body.province}`, true).toLowerCase(),
+   
         };
         await client
             .db(SDB)
@@ -106,15 +151,17 @@ module.exports._register = async (req, res, next) => {
         .updateOne({ name: 'Users' }, { $set: { name: 'Users', value: user_id } }, { upsert: true })
         res.send({success: true,data: _user});
 
-        console.log(1);
     }catch (err) {
         next(err);
     }
+    console.log(1);
 
 };
 
 module.exports._login = async (req, res, next) => {
     try {
+        // let shop = req.headers[`shop`];
+
         ['phone', 'password'].map((e) => {
             if (!req.body[e]) {
                 throw new Error(`400: Thiếu thuộc tính ${e}!`);
@@ -123,6 +170,8 @@ module.exports._login = async (req, res, next) => {
         // let [prefix, phone] = req.body.phone.split("_");
         var phone = req.body.phone;
         let user = await client.db(SDB).collection('UsersEKT').findOne({phone})
+        // let user = await client.db(SDB).collection('UsersEKT').findOne({ prefix: shop.toLowerCase() });
+
 
         if (!user) {
             throw new Error(`404: Tài khoản không chính xác!`);
@@ -151,7 +200,11 @@ module.exports._login = async (req, res, next) => {
 module.exports._update = async (req, res, next) => {
     try {
         
-        let user = await client.db(SDB).collection('UsersEKT').findOne({phone: req.params.user_phone})
+        // let user = await client.db(SDB).collection('UsersEKT').findOne({phone: req.params.user_phone})
+        req.params.user_id = Number(req.params.user_id);
+        let user = await client.db(req.user.database).collection('UsersEKT').findOne(req.params);
+        console.log(1);
+        
         if (!user) {
             throw new Error(`400: Người dùng không tồn tại!`);
         }
@@ -160,6 +213,10 @@ module.exports._update = async (req, res, next) => {
         delete req.body.code;
         delete req.body.phone;
         delete req.body.password;
+        // delete req.body.fullname;
+        // delete req.body.address;
+        // delete req.body.job;
+        
 
         let _user = { ...user, ...req.body };
         _user = {
@@ -168,25 +225,11 @@ module.exports._update = async (req, res, next) => {
             phone: _user.phone,
             password: _user.password,
             email: _user.email,
-            // avatar: _user.avatar,
-            // first_name: _user.first_name,
-            // last_name: _user.last_name,
-            // birth_day: _user.birth_day,
-            // address: _user.address,
-            // district: _user.district,
-            // province: _user.province,
-            // branch_id: _user.branch_id,
-            // store_id: _user.store_id,
-            // last_login: _user.last_login,
-            // create_date: _user.create_date,
-            // creator_id: _user.creator_id,
-            // last_update: moment().tz(TIMEZONE).format(),
-            // updater_id: req.user.user_id,
-            // active: _user.active,
-            // slug_name: removeUnicode(`${req.body.first_name}${req.body.last_name}`, true).toLowerCase(),
-            // slug_address: removeUnicode(`${req.body.address}`, true).toLowerCase(),
-            // slug_district: removeUnicode(`${req.body.district}`, true).toLowerCase(),
-            // slug_province: removeUnicode(`${req.body.province}`, true).toLowerCase(),
+            avatar: _user.avatar,
+            fullname: _user.fullname,
+            address: _user.address,
+            job: _user.job,
+
         };
         req['body'] = _user;
         await UserEKTService._update(req, res, next);
@@ -223,6 +266,7 @@ module.exports._getOne = async(req,res,next)=>{
     } catch (err) {
         next(err);
     }
+
 }
 module.exports._getOTP = async (req, res, next) => {
     try {
@@ -231,6 +275,21 @@ module.exports._getOTP = async (req, res, next) => {
                 throw new Error(`400: Thiếu thuộc tính ${e}!`);
             }
         });
+
+        const prefix = (req.headers && req.headers.shop) || false;
+        let business = await (async () => {
+            if (!prefix) {
+                let result = client.db(SDB).collection('UsersEKT').findOne({ username: req.body.phone });
+                return result;
+            }
+            let result = client.db(SDB).collection('UsersEKT').findOne({ prefix: prefix });
+            return result;
+        })();
+        const DB =
+            (business && business.database_name) ||
+            (() => {
+                throw new Error('400: Doanh nghiệp chưa được đăng ký!');
+            })();
 
         let user = await client.db(SDB).collection('UsersEKT').findOne({ phone: req.body.phone });
         if (!user) {
@@ -252,10 +311,10 @@ module.exports._getOTP = async (req, res, next) => {
                 }
             );
         res.send({ success: true, data: `Gửi OTP đến số điện thoại thành công!` });
-        console.log(2);
     } catch (err) {
         next(err);
     }
+    console.log(2);
 };
 module.exports._verifyOTP = async (req, res, next) => {
     try {
@@ -265,6 +324,15 @@ module.exports._verifyOTP = async (req, res, next) => {
             }
         });
         const prefix = (req.headers && req.headers.shop) || false;
+        
+        let business = await (async () => {
+            if (!prefix) {
+                let result = client.db(SDB).collection('UsersEKT').findOne({ phone: req.body.phone });
+                return result;
+            }
+            let result = client.db(SDB).collection('UsersEKT').findOne({ prefix: prefix });
+            return result;
+        })();
         
         let user = await client.db(SDB).collection('UsersEKT').findOne({ phone: req.body.phone });
         if (!user) {
@@ -306,10 +374,11 @@ module.exports._verifyOTP = async (req, res, next) => {
                 data: { accessToken: accessToken },
             });
         }
-        console.log(3);
     } catch (err) {
         next(err);
     }
+    console.log(3);
+
 };
 module.exports._recoveryPassword = async (req, res, next) => {
     try {

@@ -7,7 +7,6 @@ var CryptoJS = require('crypto-js');
 const { validateEmail } = require('../utils/regex');
 const { sendMailThanksOrder } = require('../libs/nodemailer');
 const { _changePoint } = require('./customer');
-const shippingService = require(`../services/shopping_dairy`)
 
 module.exports.enumStatusOrder = async (req, res, next) => {
     try {
@@ -441,6 +440,22 @@ module.exports._create = async (req, res, next) => {
         // // req[`body`] = _oderEKT;
         // // await shippingService._create(req,res,next);
         // await client.db(DB).collection('Shopping').insertOne(_oderEKT)
+        let _oderEKT = {
+            business_id: req.user._business.business_name,
+            business_prefix: req.user._business.prefix,
+            branch_id: _order.sale_location.branch_id,
+            orderId: orderId,
+            user_phone: customer.phone,
+            user_name: customer.slug_name,
+            total_cost: _order.total_cost,
+            create_at: _order.create_date,
+
+        // }
+        }
+        // // req[`body`] = _oderEKT;
+        // // await shippingService._create(req,res,next);
+        // await client.db(DB).collection('Shopping').insertOne(_oderEKT)
+        await client.db(DB).collection('Shopping').insertOne(_oderEKT)
     } catch (err) {
         next(err);
     }

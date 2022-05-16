@@ -7,18 +7,16 @@ import { Modal, Form, Row, Col, Input, Button, Upload, notification } from 'antd
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 
 //apis
-import { updateuserEKT, getuserEKT } from 'apis/userEKT'
+import { updateuserEKT } from 'apis/userEKT'
 import { uploadFile } from 'apis/upload'
 
 export default function ModalUpdateUser({ user, children, reload }) {
   const [form] = Form.useForm()
+  // const [user, setUser] = useState([])
   const [loading, setLoading] = useState(false)
   const [avatar, setAvatar] = useState('')
   const [visible, setVisible] = useState(false)
   const toggle = () => setVisible(!visible)
-
-
-
 
   const _updateUser = async () => {
     try {
@@ -34,10 +32,8 @@ export default function ModalUpdateUser({ user, children, reload }) {
       if (res.status === 200) {
         if (res.data.success) {
           toggle()
-          reload()
           notification.success({ message: 'Cập nhật thông tin cá nhân thành công' })
           reload({ user_id: res.data.data.user_id })
-     
         } else
           notification.error({
             message: res.data.message || 'Cập nhật thông tin cá nhân thành công',
@@ -74,6 +70,7 @@ export default function ModalUpdateUser({ user, children, reload }) {
       console.log(error)
     }
   }
+
 
   useEffect(() => {
     if (visible)
@@ -119,6 +116,12 @@ export default function ModalUpdateUser({ user, children, reload }) {
               </Upload>
             </Col>
 
+            <Row>
+              <col></col>
+              <col></col>
+
+            </Row>
+
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item 
                 label="Nhập tên " 
@@ -139,8 +142,8 @@ export default function ModalUpdateUser({ user, children, reload }) {
             </Col>
             <Col xs={24} sm={24} md={24} lg={8} xl={8}>
               <Form.Item name="email" label="Email">
-                <Input placeholder="Nhập email"  />
-                {/* <Input placeholder="" disabled /> */}
+                {/* <Input placeholder="Nhập email"  /> */}
+                <Input placeholder="" disabled />
                 
               </Form.Item>
             </Col>

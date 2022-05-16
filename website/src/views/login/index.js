@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
 import styles from './login.module.scss'
 import { useDispatch } from 'react-redux'
@@ -9,13 +10,18 @@ import jwt_decode from 'jwt-decode'
 import { Row, Col, Form, Input, Button, notification, Tabs } from 'antd'
 
 //apis
-import { login, getOtp } from 'apis/auth'
+import { login, getOtp } from 'apis/userEKT'
+
+
 
 export default function Login() {
   const dispatch = useDispatch()
   const [formLogin] = Form.useForm()
   let history = useHistory()
   const location = useLocation()
+
+
+
 
   const _login = async (body) => {
     try {
@@ -27,18 +33,18 @@ export default function Login() {
 
       // Khi code comment lại, code xong để lại như cũ
       // const res = await login({ ...body, username: body.username }, { shop: 'vanhoang' })
-      const res = await login({ ...body, username: body.username }, { shop: subDomain[1] })
+      const res = await login({ ...body, phone: body.phone }, { shop: subDomain[1] })
 
       dispatch({ type: ACTION.LOADING, data: false })
       console.log(res)
 
       //check account have verify
       if (res.status === 403) {
-        await getOtp(body.username)
+        await getOtp(body.phone)
         notification.error({
           message: res.data.message || 'Đăng nhập thất bại, vui lòng thử lại',
         })
-        history.push({ pathname: ROUTES.OTP, state: { username: body.username } })
+        history.push({ pathname: ROUTES.OTP, state: { phone: body.phone } })
         return
       }
 
@@ -67,27 +73,27 @@ export default function Login() {
   }
 
   //check url có subdomain hay không
-  const _isHaveSubdomain = () => {
-    try {
-      const domain = window.location.href
-      let subDomain = domain.split(`.${process.env.REACT_APP_HOST}`)
-      if (subDomain && subDomain.length === 1 && !localStorage.getItem('accessToken'))
-        window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const _isHaveSubdomain = () => {
+  //   try {
+  //     const domain = window.location.href
+  //     let subDomain = domain.split(`.${process.env.REACT_APP_HOST}`)
+  //     if (subDomain && subDomain.length === 1 && !localStorage.getItem('accessToken'))
+  //       window.location.href = `http://${process.env.REACT_APP_HOST}${ROUTES.CHECK_SUBDOMAIN}`
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
-  useEffect(() => {
-    setTimeout(() => {
-      _isHaveSubdomain()
-    }, [1000])
-  })
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     _isHaveSubdomain()
+  //   }, [1000])
+  // })
 
   useEffect(() => {
     //get username
-    const username = new URLSearchParams(location.search).get('username')
-    if (username) formLogin.setFieldsValue({ username: username })
+    const phone = new URLSearchParams(location.search).get('phone')
+    if (phone) formLogin.setFieldsValue({ phone: phone })
   }, [])
 
   return (
@@ -102,7 +108,7 @@ export default function Login() {
               <Form form={formLogin} onFinish={_login} layout="vertical" style={{ width: '100%' }}>
                 <Form.Item
                   label={<div style={{ color: 'white' }}>Số điện thoại</div>}
-                  name="username"
+                  name="phone"
                   rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
                 >
                   <Input size="large" placeholder="Nhập số điện thoại" />
@@ -124,7 +130,7 @@ export default function Login() {
                     }
                     style={{ margin: '20px 0px', color: 'white' }}
                   >
-                    Đăng ký tài khoản bán hàng
+                    Đăng ký tài khoản miễn phí!
                   </a>
                 </Row>
                 <Row justify="center">
