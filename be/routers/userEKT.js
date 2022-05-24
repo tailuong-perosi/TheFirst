@@ -15,5 +15,6 @@ router.route(`/refreshtoken`).post(user._refreshToken)
 router.route(`/getotp`).post(user._getOTP)
 router.route(`/verifyotp`).post(user._verifyOTP)
 router.route(`/recoverypassword`).post(user._recoveryPassword)
+router.route(`/getbusiness/:user_phone`).get(auth, user._getbusiness)
 
 module.exports = router;

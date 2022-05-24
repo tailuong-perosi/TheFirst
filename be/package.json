@@ -14,7 +14,7 @@
         "begin": "pm2 start sandbox.config.js --env sandbox",
         "end": "pm2 delete all",
         "log": "pm2 log AO-Sandbox",
-        "check": "nodemon index.js"
+        "server": "nodemon index.js"
     },
     "author": "",
     "license": "ISC",

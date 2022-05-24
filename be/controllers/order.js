@@ -420,11 +420,10 @@ module.exports._create = async (req, res, next) => {
 
         /**
          * create by: tailuong
-         * create date:
-         * des:
+         * create date: 10/5/2022
+         * des: Tạo thêm bảng mua của userEKT
          * */
 
-        // Tạo thêm bảng mua của userEKT
         let _oderEKT = {
             business_id: req.user._business.business_name,
             business_prefix: req.user._business.prefix,
@@ -432,10 +431,9 @@ module.exports._create = async (req, res, next) => {
             orderId: orderId,
             user_phone: customer.phone,
             user_name: customer.slug_name,
-
+            create_date: moment().tz(TIMEZONE).format(),
+            total_cost: _order.total_cost,
         }
-        // // req[`body`] = _oderEKT;
-        // // await shippingService._create(req,res,next);
         await client.db(DB).collection('Shopping').insertOne(_oderEKT)
     } catch (err) {
         next(err);

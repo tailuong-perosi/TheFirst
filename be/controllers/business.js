@@ -119,23 +119,23 @@ module.exports._create = async (req, res, next) => {
             throw new Error('Kiểm tra thông tin doanh nghiệp không thành công!');
         });
         let otpCode = String(Math.random()).substr(2, 6);
-        if (req.body.username) {
+        if (req.body.company_phone) {
             let verifyId = crypto.randomBytes(10).toString(`hex`);
             let verifyLink = `https://quantribanhang.viesoftware.vn/verifyaccount?uid=${verifyId}`;
             let _verifyLink = {
-                username: req.body.username,
+                company_phone: req.body.company_phone,
                 UID: String(verifyId),
                 verify_link: verifyLink,
                 verify_timelife: moment().tz(TIMEZONE).add(5, `minutes`).format(),
             };
-            await Promise.all([
-                mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink)),
-                client.db(SDB).collection('VerifyLinks').insertOne(_verifyLink),
-            ]);
+            // await Promise.all([
+            //     mail.sendMail(req.body.email, `Yêu cầu xác thực`, verifyMail(otpCode, verifyLink)),
+            //     client.db(SDB).collection('VerifyLinks').insertOne(_verifyLink),
+            // ]);
         }
-        if (req.body.phone) {
+        if (req.body.company_phone) {
             let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
-            sendSMS([req.body.phone], verifyMessage, 2, 'VIESOFTWARE');
+            sendSMS([req.body.company_phone], verifyMessage, 2, 'VIESOFTWARE');
         }
         business_id++;
         system_user_id++;
@@ -152,15 +152,15 @@ module.exports._create = async (req, res, next) => {
             prefix: req.body.prefix,
             business_name: req.body.business_name,
             database_name: DB,
-            company_name: req.body.company_name || '',
             company_email: req.user.email || '',
-            company_phone: req.user.phone || '',
-            company_website: req.body.company_website || '',
-            company_address: req.body.company_address || '',
-            company_district: req.body.company_district || '',
-            company_province: req.body.company_province || '',
-            tax_code: req.body.tax_code || '',
-            career_id: req.body.career_id || '',
+            company_phone: req.body.company_phone ,
+            company_website: req.body.company_website ,
+            company_address: req.body.company_address ,
+            company_district: req.body.company_district ,
+            company_province: req.body.company_province ,
+            tax_code: req.body.tax_code ,
+            tax_codeimage: req.body.avarta3,
+            career_id: req.body.career_id,
             price_recipe: req.body.price_recipe || 'FIFO',
             verify_with: (() => {
                 if (req.body.verify_with) {
@@ -176,8 +176,10 @@ module.exports._create = async (req, res, next) => {
             })(),
             otp_code: otpCode,
             otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
-            // CMND_CCCD: req.body.CMND,
+            CMND_CCCD: req.body.CMND,
+            CMNDimage: req.body.avatar1 || '',
             Business_Registration: req.body.Business_Registration || '',
+            BRimage: req.body.avarta2 || '',
             create_date: moment().tz(TIMEZONE).format(),
             creator_id: user_id,
             last_update: moment().tz(TIMEZONE).format(),
@@ -318,7 +320,8 @@ module.exports._create = async (req, res, next) => {
         };
         /**
          * create: tailuong
-         * Tao Work
+         * date: 10/5/2022
+         * des: tạo bảng user khi tạo cửa hàng
          */
         let _work ={
             // work_id: work_id,
@@ -459,9 +462,7 @@ module.exports._delete = async (req, res, next) => {
     }
 };
 
-module.exports._getDetail = async(req,res,next)=>{
-    
-}
+
 
 module.exports._Validate = async(req,res,next)=>{
     try {
@@ -487,3 +488,80 @@ module.exports._Validate = async(req,res,next)=>{
         next(err);
     }
 }
+module.exports._getOTP = async (req, res, next) => {
+    try {
+        ['company_phone'].map((e) => {
+            if (!req.body[e]) {
+                throw new Error(`400: Thiếu thuộc tính ${e}!`);
+            }
+        });
+
+        let otpCode = String(Math.random()).substr(2, 6);
+        let verifyMessage = `[VIESOFTWARE] Mã OTP của quý khách là ${otpCode}`;
+        sendSMS([req.body.company_phone], verifyMessage, 2, 'VIESOFTWARE');
+        // let otpCode = String(Math.random()).substr(2, 6);
+        // await Promise.all(mail.sendMail(user.email, 'Mã xác thực', otpMail(otpCode)));
+        await client
+            .db(SDB)
+            .collection(`Business`)
+            .updateOne(
+                { company_phone: req.body.company_phone },
+                {
+                    $set: {
+                        otp_code: otpCode,
+                        otp_timelife: moment().tz(TIMEZONE).add(5, 'minutes').format(),
+                    },
+                }
+            );
+        res.send({ success: true, data: `Gửi OTP đến số điện thoại thành công!` });
+    } catch (err) {
+        next(err);
+    }
+};
+
+
+module.exports._verifyOTP = async (req, res, next) => {
+    try {
+        ['company_phone','otp_code'].map((e) => {
+            if (!req.body[e]) {
+                throw new Error(`400: Thiếu thuộc tính ${e}!`);
+            }
+        });
+        
+        let business = await client.db(SDB).collection('Business').findOne({ company_phone: req.body.company_phone });
+        if (!business) {
+            throw new Error('400: Cửa hàng không tồn tại!');
+        }
+        if (req.body.otp_code != business.otp_code) {
+            throw new Error('400: Mã xác thực không chính xác!');
+        }
+        if (business.active == false) {
+            await client
+                .db(SDB)
+                .collection('Business')
+                .updateOne(
+                    { company_phone: req.body.company_phone },
+                    {
+                        $set: {
+                            active: true,
+                        },
+                    }
+                );
+            res.send({
+                success: true,
+                message: 'Kích hoạt tài khoản thành công!',
+            });
+        } else {
+            await client
+                .db(SDB)
+                .collection('Business')
+                .updateOne({ company_phone: req.body.company_phone }, { $set: { otp_code: true, otp_timelife: true } });
+            res.send({
+                success: true,
+                message: `Mã OTP chính xác, xác thực thành công!`,
+            });
+        }
+    } catch (err) {
+        next(err);
+    }
+};

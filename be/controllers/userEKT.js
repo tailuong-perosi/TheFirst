@@ -394,3 +394,11 @@ module.exports._checkVerifyLink = async (req, res, next) => {
         next(err);
     }
 };
+
+module.exports._getbusiness = async(req,res,next)=>{
+    try {
+        await UserEKTService._getBusiness(req,res,next);
+    } catch (error) {
+        next(error)
+    }
+}

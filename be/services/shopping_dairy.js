@@ -29,8 +29,8 @@ module.exports._get = async (req, res, next) => {
   try {
     let aggregateQuery = []
     // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-    if (req.params.user_phone) {
-      aggregateQuery.push({ $match: { user_phone: req.params.user_phone } })}
+    if (req.query.user_phone) {
+      aggregateQuery.push({ $match: { user_phone: req.query.user_phone } })}
     let countQuery = [...aggregateQuery]
     aggregateQuery.push({ $sort: { create_date: -1 } })
     if (req.query.page && req.query.page_size) {

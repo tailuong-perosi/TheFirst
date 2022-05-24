@@ -147,17 +147,16 @@ module.exports._getOne = async (req, res, next) => {
     try {
         let aggregateQuery = [];
         // lấy các thuộc tính tìm kiếm cần độ chính xác cao ('1' == '1', '1' != '12',...)
-        if (req.params.business_id) {
-            aggregateQuery.push({ $match: { business_id: (req.params.business_id) } });
+        if (req.query.business_id) {
+            aggregateQuery.push({ $match: { business_id: Number(req.query.business_id) } });   
         }
             
         // lấy data từ database
         let business = await 
-            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray()
+            client.db(SDB).collection(`Business`).aggregate(aggregateQuery).toArray();
             
         res.send({
             success: true,
-           
             data: business,
         });
     } catch (err) {

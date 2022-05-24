@@ -100,6 +100,19 @@ module.exports._create = async (req, res, next) => {
             .updateOne({ name: 'Users' }, { $set: { name: 'Users', value: user_id } }, { upsert: true });
         req[`body`] = _user;
         await userService._create(req, res, next);
+
+        /**
+         * create: tailuong
+         * date: 19/5/2022
+         * des: 
+         */
+        let User_Business = {
+            user_phone: req.body.username,
+            business_id: req.user.business_id,
+            business_prefix: req.user._business.prefix,
+            role_id: req.body.role_id,
+        }
+        await client.db(SDB).collection('Staff').insertOne(User_Business)
     } catch (err) {
         next(err);
     }
