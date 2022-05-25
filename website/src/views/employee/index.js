@@ -499,7 +499,6 @@
 // }
 import React, { useEffect, useState, useRef } from 'react'
 
-import moment from 'moment'
 import { compare } from 'utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { ACTION, ROUTES } from 'consts'
@@ -516,40 +515,31 @@ import {
   Button,
   Space,
   notification,
-  DatePicker,
   Tooltip,
 } from 'antd'
 import { SearchOutlined, ArrowLeftOutlined, DeleteOutlined,ContactsTwoTone } from '@ant-design/icons'
 
 //apis
-import { getBusinesses, deleteBusinesses } from 'apis/business'
-import { getRoles } from 'apis/role'
+import { getMenu, deleteMenu } from 'apis/menu'
+
 
 //components
 import TitlePage from 'components/title-page'
 import EmployeeForm from './employee-form'
 import SettingColumns from 'components/setting-columns'
-import columnsA from './colum'
+import columnsC from './colum'
 
 const { Option } = Select
 export default function Employee() {
   const typingTimeoutRef = useRef(null)
   const history = useHistory()
   const dispatch = useDispatch()
-  const branchIdApp = useSelector((state) => state.branch.branchId)
-
-  const [roles, setRoles] = useState([])
-  const [branches, setBranches] = useState([])
   const [columns, setColumns] = useState([])
-  const [business, setBusiness] = useState([])
-  const [countBusiness, setCountBusiness] = useState([])
+  const [menu, setMenu] = useState([])
   const [loading, setLoading] = useState(false)
-  const [Address, setAddress] = useState({ province: [], district: [] })
   const [paramsFilter, setParamsFilter] = useState({ page: 1, page_size: 20 })
-  const [valueDateSearch, setValueDateSearch] = useState(null)
   const [valueSearch, setValueSearch] = useState('')
-  const [valueTime, setValueTime] = useState() //dùng để hiện thị value trong filter by time
-  const [valueDateTimeSearch, setValueDateTimeSearch] = useState({})
+
   const [isOpenSelect, setIsOpenSelect] = useState(false)
   const toggleOpenSelect = () => setIsOpenSelect(!isOpenSelect)
 
@@ -573,47 +563,39 @@ export default function Employee() {
     }, 650)
   }
 
-  const _clearFilters = () => {
-    setParamsFilter({ page: 1, page_size: 20 })
-    setValueSearch('')
-    setValueTime()
-    setValueDateTimeSearch({})
-    setValueDateSearch(null)
-  }
 
-  const _deleteBusiness = async (id) => {
+
+  const _deleteMenu = async (menu_id) => {
     try {
       dispatch({ type: ACTION.LOADING, data: true })
-      const res = await deleteBusinesses(id)
+      const res = await deleteMenu(menu_id)
       dispatch({ type: ACTION.LOADING, data: false })
 
       console.log(res)
       if (res.status === 200) {
         if (res.data.success) {
-          notification.success({ message: 'Xóa cửa hàng thành công' })
-            ()
+          notification.success({ message: 'Xóa chức năng thành công' })
+          _getMenu()
         } else
           notification.error({
-            message: res.data.message || 'Xóa cửa hàng thất bại, vui lòng thử lại',
+            message: res.data.message || 'Xóa chức năng thất bại, vui lòng thử lại',
           })
       } else
         notification.error({
-          message: res.data.message || 'Xóa cửa hàng thất bại, vui lòng thử lại',
+          message: res.data.message || 'Xóa chức năng thất bại, vui lòng thử lại',
         })
     } catch (err) {
       dispatch({ type: ACTION.LOADING, data: false })
       console.log(err)
     }
   }
-  const _getBusuiness = async () => {
+  const _getMenu = async () => {
     try {
       setLoading(true)
-      const res = await getBusinesses({ ...paramsFilter })
+      const res = await getMenu({ ...paramsFilter })
       console.log(res)
       if (res.status === 200) {
-        // const employees = res.data.data.filter((employee) => employee.role_id !== 1)
-        setBusiness(res.data.data)
-        setCountBusiness(res.data.count)
+        setMenu(res.data.data)
         console.log('res.data.data', res.data.data)
       }
       setLoading(false)
@@ -622,48 +604,12 @@ export default function Employee() {
       console.log(e)
     }
   }
-  const getAddress = async (api, callback, key, params) => {
-    try {
-      const res = await api(params)
-      if (res.status === 200) {
-        callback((e) => {
-          return { ...e, [key]: res.data.data }
-        })
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
-  // const _getRoles = async () => {
-  //   try {
-  //     const res = await getRoles()
-  //     if (res.status === 200) {
-  //       const roles = res.data.data.filter((e) => e.role_id !== 1)
-  //       setRoles([...roles])
-  //     }
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   _getBranches()
-  //   _getRoles()
-  //   _getProvinces()
-  //   _getDistricts()
-  // }, [])
-
-  // useEffect(() => {
-  //   getAddress(getProvinces, setAddress, 'province')
-  //   getAddress(getDistricts, setAddress, 'district')
-  // }, [])
-
   useEffect(() => {
-    _getBusuiness()
+    _getMenu()
   }, [paramsFilter])
 
   return (
@@ -676,7 +622,7 @@ export default function Employee() {
             style={{ cursor: 'pointer' }}
           >
             <ArrowLeftOutlined style={{ marginRight: 8 }} />
-            <div>Quản lý cửa hàng</div>
+            <div>Quản lý chức năng</div>
           </Row>
         }
       >
@@ -684,17 +630,14 @@ export default function Employee() {
           <SettingColumns
             columns={columns}
             setColumns={setColumns}
-            columnsDefault={columnsA}
-            nameColumn="columnsA"
+            columnsDefault={columnsC}
+            nameColumn="columnsC"
           />
-          <EmployeeForm
-            reloadData={_getBusuiness}
-          // roles={roles}
-          >
+          
             <Button type="primary" size="large">
-              Tạo nhân viên
+              Tạo chức năng
             </Button>
-          </EmployeeForm>
+     
         </Space>
       </TitlePage>
       <Row
@@ -705,7 +648,7 @@ export default function Employee() {
           <Input
             allowClear
             prefix={<SearchOutlined />}
-            placeholder="Tìm kiếm tên cửa hàng"
+            placeholder="Tìm kiếm tên chức năng"
             onChange={onSearch}
             value={valueSearch}
             bordered={false}
@@ -715,7 +658,7 @@ export default function Employee() {
 
       <Table
         loading={loading}
-        rowKey="business_id"
+        rowKey="menu_id"
         size="small"
         pagination={{
           position: ['bottomLeft'],
@@ -725,44 +668,41 @@ export default function Employee() {
           showQuickJumper: true,
           onChange: (page, pageSize) =>
             setParamsFilter({ ...paramsFilter, page: page, page_size: pageSize }),
-          total: countBusiness,
+          // total: countBusiness,
         }}
         columns={columns.map((column) => {
           if (column.key === 'stt') return { ...column, render: (text, record, index) => index + 1 }
-          if (column.key === 'name')
+          if (column.key === 'nameMenu') 
             return {
               ...column,
               render: (text, record) => (
+                
                 <EmployeeForm
                   record={record}
-                  reloadData={_getBusuiness}
-                  roles={roles}
-                >
-                  <a>{record.business_name}</a>
+                  reloadData={_getMenu}
+                  // roles={roles}
+                > 
+                  <a>{record.name}</a>
                 </EmployeeForm>
               ),
             }
-          if (column.key === 'name')
-            return { ...column, sorter: (a, b) => compare(a, b, 'phone') }
-          if (column.key === 'address')
-            return {
-              ...column,
-              render: (text, record) =>
-                record.address
-            }
-          if(column.key === 'phone') return {...column, render: (text, record) => record.company_phone}
-          if (column.key === 'profile') return { ...column, sorter: (a, b) => compare(a, b, 'profile') }
+          if (column.key === 'parent_menu_id') 
+            return { ...column, render:(text,record)=> record.parent_menu_id}
+            if(column.key === 'description') return {...column, render: (text, record) => record.description}
+          if(column.key === 'url') return {...column, render: (text, record) => record.url}
+          if (column.key === 'view_position') return  {...column, render: (text, record) => record.view_position }
           if (column.key === 'status')
             return {
 
               ...column,
               render: (data, record) => (record.status ,
                 <Select defaultValue={record.status}  style={{ width: 120 }} onChange={handleChange}>
-                  <Option value="active">active</Option>
-                  <Option value="band">band</Option>
-                  <Option value="warnning" >warnning</Option>
-                  <Option value="block">block</Option>
+                  <Option value="new">new</Option>
+                  <Option value="testing">testing</Option>
+                  <Option value="ready to public" >ready to public</Option>
+                  <Option value="public ">public</Option>
                   <Option value="waiting for review">waiting for review</Option>
+                  <Option value="pending">pending</Option>
                 </Select>
               )
             }
@@ -773,25 +713,23 @@ export default function Employee() {
                 <Space>
                   <Tooltip>
                 <Popconfirm
-                  title="Bạn có muốn xóa nhân viên này không?"
+                  title="Bạn có muốn xóa chức năng này không?"
                   okText="Đồng ý"
                   cancelText="Từ chối"
-                  onConfirm={() => _deleteBusiness(record.user_id)}
+                  onConfirm={() => _deleteMenu(record.menu_id)}
                 >
                   <Button icon={<DeleteOutlined />} type="primary" danger />
                   
                 </Popconfirm>
                 </Tooltip>
-                <Tooltip>
-                <Button  icon={<ContactsTwoTone />} type='primary' />
-                </Tooltip>
+                
                 </Space>
               ),
             }
 
           return column
         })}
-        dataSource={business}
+        dataSource={menu}
         style={{ width: '100%', marginTop: 10 }}
       />
     </div>

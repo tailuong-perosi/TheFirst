@@ -37,6 +37,9 @@ module.exports._get = async (req, res, next) => {
         if (req.query.business_id) {
             aggregateQuery.push({ $match: { business_id: Number(req.query.business_id) } });
         }
+        if (req.query.business_name) {
+            aggregateQuery.push({ $match: { business_name: Number(req.query.business_name) } });
+        }
         if (req.query.system_role_id) {
             aggregateQuery.push({ $match: { role_id: Number(req.query.role_id) } });
         }

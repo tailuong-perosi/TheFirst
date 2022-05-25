@@ -17,9 +17,6 @@ import { addBusiness, verify, getOtp } from 'apis/business'
 
 
 
-
-
-
 function Overview() {
 
   const dispatch = useDispatch()

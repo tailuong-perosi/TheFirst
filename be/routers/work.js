@@ -3,7 +3,7 @@ const router = express.Router();
 
 const work = require('../controllers/Works')
 
-router.route('/:user_phone').get(work._get)
+router.route('/').get(work._get)
 
 
 

@@ -1,40 +1,37 @@
 const columns = [
-    {
+  {
       title: 'STT',
       key: 'stt',
       width: 60,
-    },
-    {
-      title: 'Tên cửa hàng',
-      key: 'name',
-    },
-    {
-      title: 'Chủ cửa hàng',
-      dataIndex: 'username',
-      key: 'username',
-    },
-    {
-      title: 'Địa chỉ',
-      key: 'address',
-    },
-    {
-      title: 'Số điện thoại',
-      key: 'phone',
-      dataIndex: 'phone',
-    },
-    {
-      title: 'Trạng thái hồ sơ',
-      key: 'profile',
-    },
-    {
+  },
+  {
+      title: 'Tên Menu',
+      key: 'nameMenu',
+  },
+  {
+      title: 'Menu cấp trên',
+      key: 'parent_menu_id',
+  },
+  {
+      title: 'Mô tả',
+      key: 'description',
+  },
+  {
+      title: 'URL',
+      key: 'url',
+  },
+  {
+      title: 'Vị trí hiển thị',
+      key: 'view_position',
+  },
+  {
       title: 'Trạng thái',
       key: 'status',
-    },
-    {
+  },
+  {
       title: 'Hành động',
       key: 'action',
-    },
-  ]
-  
-  export default columns
-  
+  },
+]
+
+export default columns

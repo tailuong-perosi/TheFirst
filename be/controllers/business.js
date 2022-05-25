@@ -77,18 +77,14 @@ module.exports._create = async (req, res, next) => {
             //     .collection('Users')
             //     .findOne({
             //         $or: [
-            //             // { phone: req.body.phone, phone: { $ne: '' } },
-            //             { username: req.body.username, username: { $ne: '' } },
-            //             { email: req.body.email, email: { $ne: '' } },
+            //             { phone: req.user.phone },
+                        
             //         ],
             //     }),
         ]);
         if (business) {
             throw new Error(`400: Tên doanh nghiệp đã được đăng ký!`);
         }
-        // if (user) {
-        //     throw new Error(`400: Tên đăng nhập đã được sử dụng!`);
-        // }
         const DB = `${req.body.prefix}DB`;
         let [business_id, system_user_id] = await Promise.all([
             client
@@ -325,6 +321,8 @@ module.exports._create = async (req, res, next) => {
          */
         let _work ={
             // work_id: work_id,
+            business_id: business_id,
+            logo:req.body.logo,
             user_phone: req.user.phone,
             business_name: req.body.business_name,
             role_name: "ADMIN",

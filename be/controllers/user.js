@@ -108,7 +108,9 @@ module.exports._create = async (req, res, next) => {
          */
         let User_Business = {
             user_phone: req.body.username,
-            business_id: req.user.business_id,
+            business_id: req.user._business.business_id,
+            business_name: req.user._business.business_name,
+            logo: req.user._business.logo,
             business_prefix: req.user._business.prefix,
             role_id: req.body.role_id,
         }
