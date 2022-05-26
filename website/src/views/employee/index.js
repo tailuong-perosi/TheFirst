@@ -543,6 +543,12 @@ export default function Employee() {
   const [isOpenSelect, setIsOpenSelect] = useState(false)
   const toggleOpenSelect = () => setIsOpenSelect(!isOpenSelect)
 
+  const _onFilter = (attribute = '', value = '') => {
+    if (value) paramsFilter[attribute] = value
+    else delete paramsFilter[attribute]
+    setParamsFilter({ ...paramsFilter, page: 1 })
+  }
+
   const onSearch = (e) => {
     const value = e.target.value
     setValueSearch(value)
@@ -554,8 +560,10 @@ export default function Employee() {
       else delete paramsFilter.name
 
       setParamsFilter({ ...paramsFilter, page: 1 })
-    }, 750)
+    }, 650)
   }
+
+
 
   const _deleteMenu = async (menu_id) => {
     try {
@@ -626,14 +634,10 @@ export default function Employee() {
             nameColumn="columnsC"
           />
           
-          <EmployeeForm
-            reloadData={_getMenu}
-          >
             <Button type="primary" size="large">
               Tạo chức năng
             </Button>
-          </EmployeeForm>
-            
+     
         </Space>
       </TitlePage>
       <Row

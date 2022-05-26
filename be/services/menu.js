@@ -35,7 +35,16 @@ module.exports._get = async (req, res, next) => {
                 $match: { menu_id: Number(req.query.menu_id) },
             });
         }
-
+        if (req.query.creator_id) {
+            aggregateQuery.push({
+                $match: { creator_id: Number(req.query.creator_id) },
+            });
+        }
+        if (req.query.to_date) {
+            aggregateQuery.push({
+                $match: { create_date: { $lte: req.query.to_date } },
+            });
+        }
         // lấy các thuộc tính tìm kiếm với độ chính xác tương đối ('1' == '1', '1' == '12',...)
         if (req.query.name) {
             aggregateQuery.push({

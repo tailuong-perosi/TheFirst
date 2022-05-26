@@ -45,7 +45,6 @@ import {
   MedicineBoxOutlined,
   NodeExpandOutlined,
   PrinterOutlined,
-  
 } from '@ant-design/icons'
 
 //components
@@ -59,7 +58,6 @@ import { getAllBranch } from 'apis/branch'
 
 import { getMenu, deleteMenu } from 'apis/menu'
 import Item from 'antd/lib/list/Item'
-import { render } from 'sass'
 
 const { Sider } = Layout
 const BaseLayout = (props) => {
@@ -116,6 +114,7 @@ const BaseLayout = (props) => {
       console.log(res)
       if (res.status === 200) {
         setMenu(res.data.data)
+        console.log('res.data.data', res.data.data)
       }
       setLoading(false)
     } catch (e) {
@@ -158,7 +157,7 @@ const BaseLayout = (props) => {
       path: ROUTES.OVERVIEW,
       title: 'Tổng quan',
       permissions: [PERMISSIONS.tong_quan],
-      icon: "DashboardOutlined" ,
+      icon: <DashboardOutlined />,
     },
     {
       pathsChild: [],
@@ -390,91 +389,91 @@ const BaseLayout = (props) => {
     },
   ]
 
-  const renderMenuItem = (_menu) => (
-    <Permission permissions={_menu.permissions} key={_menu.path}>
-      {_menu.menuItems ? (
-        <Menu.SubMenu
-          // className={`${styles['edit-submenu-arrow']} edit-submenu-arrow`}
-          style={{
-            // height: 40,
-            backgroundColor:
-              (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-              '#e7e9fb',
-            width: '100%',
-            // height: collapsed ? 40 : '',
-            display: 'block',
-          }}
-          key={_menu.path}
-          // onTitleClick={() => history.push(_menu.path)}
-          onClick={_menu.path === ROUTES.SELL && toggle}
-          title={
-            <Link
-              style={{
-                fontSize: '0.8rem',
+  // const renderMenuItem = (_menu) => (
+  //   <Permission permissions={_menu.permissions} key={_menu.path}>
+  //     {_menu.menuItems ? (
+  //       <Menu.SubMenu
+  //         // className={`${styles['edit-submenu-arrow']} edit-submenu-arrow`}
+  //         style={{
+  //           // height: 40,
+  //           backgroundColor:
+  //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
+  //             '#e7e9fb',
+  //           width: '100%',
+  //           // height: collapsed ? 40 : '',
+  //           display: 'block',
+  //         }}
+  //         key={_menu.path}
+  //         // onTitleClick={() => history.push(_menu.path)}
+  //         onClick={_menu.path === ROUTES.SELL && toggle}
+  //         title={
+  //           <Link
+  //             style={{
+  //               fontSize: '0.8rem',
 
-                color:
-                  location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-                    ? '#5F73E2'
-                    : 'rgba(0, 0, 0, 0.85)',
-              }}
-              to={_menu.path}
-            >
-              {_menu.title}
-            </Link>
-          }
-          icon={
-            <Link
-              style={{
-                fontSize: '0.8rem',
-                color:
-                  location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
-                    ? '#5F73E2'
-                    : 'rgba(0, 0, 0, 0.85)',
-              }}
-              to={_menu.path}
-            >
-              {(<_menu.icon/>)}
-            </Link>
-          }
-        >
-          {/* menu trong sản phẩm */}
-          {_menu.menuItems.map((e) => (
-            <Permission permissions={e.permissions}>
-              <Menu.Item
-                key={e.path}
-                style={{
-                  fontSize: '0.8rem',
-                  backgroundColor:
-                    (location.pathname === e.path || e.pathsChild.includes(location.pathname)) &&
-                    '#e7e9fb',
-                }}
-              >
-                <Link to={e.path}>{e.title}</Link>
-              </Menu.Item>
-            </Permission>
-          ))}
-        </Menu.SubMenu>
-      ) : (
-        <Menu.Item
-          key={_menu.path}
-          style={{
-            fontSize: '0.8rem',
-            backgroundColor:
-              (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
-              '#e7e9fb',
-          }}
-          icon={(<_menu.icon/>)}
-          onClick={_menu.path === ROUTES.SELL && toggle}
-        >
-          {/* menu bự */}
+  //               color:
+  //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
+  //                   ? '#5F73E2'
+  //                   : 'rgba(0, 0, 0, 0.85)',
+  //             }}
+  //             to={_menu.path}
+  //           >
+  //             {_menu.title}
+  //           </Link>
+  //         }
+  //         icon={
+  //           <Link
+  //             style={{
+  //               fontSize: '0.8rem',
+  //               color:
+  //                 location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)
+  //                   ? '#5F73E2'
+  //                   : 'rgba(0, 0, 0, 0.85)',
+  //             }}
+  //             to={_menu.path}
+  //           >
+  //             {_menu.icon}
+  //           </Link>
+  //         }
+  //       >
+  //         {/* menu trong sản phẩm */}
+  //         {_menu.menuItems.map((e) => (
+  //           <Permission permissions={e.permissions}>
+  //             <Menu.Item
+  //               key={e.path}
+  //               style={{
+  //                 fontSize: '0.8rem',
+  //                 backgroundColor:
+  //                   (location.pathname === e.path || e.pathsChild.includes(location.pathname)) &&
+  //                   '#e7e9fb',
+  //               }}
+  //             >
+  //               <Link to={e.path}>{e.title}</Link>
+  //             </Menu.Item>
+  //           </Permission>
+  //         ))}
+  //       </Menu.SubMenu>
+  //     ) : (
+  //       <Menu.Item
+  //         key={_menu.path}
+  //         style={{
+  //           fontSize: '0.8rem',
+  //           backgroundColor:
+  //             (location.pathname === _menu.path || _menu.pathsChild.includes(location.pathname)) &&
+  //             '#e7e9fb',
+  //         }}
+  //         icon={_menu.icon}
+  //         onClick={_menu.path === ROUTES.SELL && toggle}
+  //       >
+  //         {/* menu bự */}
 
-          {/* <Link to={_menu.path}>{_menu.title}</Link> */}
-        </Menu.Item>
+  //         {/* <Link to={_menu.path}>{_menu.title}</Link> */}
+  //       </Menu.Item>
+  
+  //     )}
 
-      )}
-
-    </Permission>
-  )
+  //   </Permission>
+  // )
 
   const onSignOut = () => {
     dispatch({ type: ACTION.LOGOUT })
@@ -580,19 +579,16 @@ const BaseLayout = (props) => {
           selectedKeys={routeMatch.path}
           mode="inline"
         >
-          {/* {MENUS. map(renderMenuItem)} */}
-          {
-            menu && menu.map((Item, index) => {
-              return (
-                <Menu.Item key={Item.url} icon={(<Item.icon/>)} >
-                  <Link to={Item.url} >{Item.name}</Link>
-                </Menu.Item>
-              )
-            })
-          }
-          
-          <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut}  icon={<LogoutOutlined />}>
-         
+{
+        menu && menu.map((Item,index)=>{
+          return(
+            <Menu.Item key={Item.url}  icon={Item.icon}>
+            <Link to={Item.url} >{Item.name}</Link>
+            </Menu.Item>
+          )
+        })
+      }
+          <Menu.Item key={ROUTES.LOGIN} onClick={onSignOut} icon={<LogoutOutlined />}>
             <Link to={ROUTES.LOGIN}>Đăng xuất</Link>
           </Menu.Item>
         </Menu>
