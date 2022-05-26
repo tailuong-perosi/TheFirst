@@ -5,11 +5,11 @@ const columns = [
       width: 60,
   },
   {
-      title: 'Tên Menu',
+      title: 'Tên Chức năng',
       key: 'nameMenu',
   },
   {
-      title: 'Menu cấp trên',
+      title: 'Chức năng cấp trên',
       key: 'parent_menu_id',
   },
   {

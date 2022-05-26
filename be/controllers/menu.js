@@ -75,7 +75,8 @@ module.exports._create = async (req, res, next) => {
             creator_id: req.user.user_id,
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: req.user.user_id,
-            is_delete: false
+            slug_name: removeUnicode((req.body.name), true).toLowerCase(),
+            is_delete: false,
         };
         await client
             .db(SDB)
@@ -112,6 +113,7 @@ module.exports._update = async (req, res, next) => {
             last_update: moment().tz(TIMEZONE).format(),
             updater_id: req.user.user_id,
             is_delete: _menu.is_delete,
+
         };
         req['body'] = _menu;
         await menuService._update(req, res, next);
